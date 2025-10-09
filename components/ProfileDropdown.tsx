@@ -1,0 +1,57 @@
+import React from 'react';
+import { PROFILE_LINKS } from '../constants';
+import { ProfileLink } from '../types';
+
+interface ProfileDropdownProps {
+    profile: { username: string, avatar_url: string } | null;
+    onNavigate: (page: ProfileLink['name']) => void;
+    onLogout: () => void;
+}
+
+export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onNavigate, onLogout }) => {
+    const xpPercentage = 21.56; // Mock data
+
+    return (
+        <div className="relative group">
+            <button className="flex items-center space-x-2" aria-label={`User profile for ${profile?.username}`} onClick={() => onNavigate('Profile')}>
+                <img src={profile?.avatar_url || 'https://picsum.photos/seed/avatar-main/40/40'} alt="User Avatar" className="w-8 h-8 rounded-full" />
+            </button>
+            <div className="absolute top-full right-0 mt-2 w-72 bg-card-bg border border-outline rounded-lg shadow-2xl z-40 p-4 transition-all duration-200 origin-top-right scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 invisible group-hover:visible">
+                <div className="flex items-center space-x-4 mb-4">
+                    <img src={profile?.avatar_url || 'https://picsum.photos/seed/avatar-main/40/40'} alt="User Avatar" className="w-12 h-12 rounded-full" />
+                    <div>
+                        <p className="font-semibold text-white">{profile?.username}</p>
+                        <p className="text-xs text-text-muted">ID: 18510805</p>
+                    </div>
+                </div>
+
+                <div className="mb-4">
+                    <div className="flex justify-between items-center text-xs text-text-muted mb-1">
+                        <span>{xpPercentage}%</span>
+                        <span>Level 13</span>
+                    </div>
+                    <div className="w-full bg-background rounded-full h-1.5">
+                        <div className="bg-accent-green h-1.5 rounded-full" style={{ width: `${xpPercentage}%` }}></div>
+                    </div>
+                </div>
+
+                <div className="space-y-1">
+                    {/* FIX: `link.icon` is a component, so it needs to be rendered as a JSX element. */}
+                    {PROFILE_LINKS.map(link => {
+                         const Icon = link.icon;
+                         return (
+                             <button
+                                key={link.name}
+                                onClick={() => link.name === 'Log out' ? onLogout() : onNavigate(link.name)}
+                                className="w-full flex items-center space-x-3 p-2 rounded-md text-sm text-text-muted hover:bg-white/5 hover:text-white transition-colors"
+                             >
+                                <Icon className="w-5 h-5" />
+                                <span>{link.name}</span>
+                             </button>
+                         );
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+}

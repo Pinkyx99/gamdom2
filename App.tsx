@@ -1,0 +1,184 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { Header } from './components/Header';
+import { Hero } from './components/HeroCarousel';
+import { AuthModal } from './components/AuthModal';
+import { supabase } from './lib/supabaseClient';
+import { Session } from '@supabase/supabase-js';
+import { Profile, ProfileLink } from './types';
+import { WalletModal } from './components/WalletModal';
+import { LastWinners } from './components/CategoryCards';
+import { OriginalsRow } from './components/OriginalsRow';
+import { GameGrid } from './components/GameGrid';
+import ProfilePage from './pages/ProfilePage';
+import CrashGamePage from './pages/CrashGamePage';
+import MinesGamePage from './pages/MinesGamePage';
+import RouletteGamePage from './pages/RouletteGamePage';
+import DiceGamePage from './pages/DiceGamePage';
+import { ChatRail } from './components/ChatRail';
+import { TipUserModal } from './components/TipUserModal';
+
+type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | ProfileLink['name'];
+
+const App: React.FC = () => {
+  const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authView, setAuthView] = useState<'signIn' | 'signUp'>('signIn');
+  const [currentView, setCurrentView] = useState<View>('home');
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [tipRecipient, setTipRecipient] = useState<{ id: string; username: string } | null>(null);
+
+  const getProfile = useCallback(async (session: Session) => {
+    try {
+      const { user } = session;
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select(`id, username, avatar_url, balance, wagered, games_played`)
+        .eq('id', user.id)
+        .single();
+
+      if (error && status !== 406) throw error;
+
+      if (data) {
+        setProfile({ ...data, email: user.email || '' });
+      }
+    } catch (error) {
+      console.log('Error fetching profile:', error);
+    }
+  }, []);
+  
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session) getProfile(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session) {
+        getProfile(session);
+      } else {
+        setProfile(null);
+        setCurrentView('home');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [getProfile]);
+
+  const openAuthModal = (view: 'signIn' | 'signUp') => {
+    setAuthView(view);
+    setShowAuthModal(true);
+  };
+
+  const handleProfileUpdate = useCallback(() => {
+    if (session) getProfile(session);
+  }, [session, getProfile]);
+
+  const handleGameSelect = (gameName: string) => {
+    const game = gameName.toLowerCase();
+    if (game === 'crash' || game === 'mines' || game === 'roulette' || game === 'dice') {
+      setCurrentView(game as View);
+    }
+  };
+  
+  const getAppBgClass = () => {
+    switch(currentView) {
+        case 'crash': return 'bg-[#0F1923]';
+        case 'mines': return 'bg-[#0b1016]';
+        case 'roulette': return 'bg-[#0D1316]';
+        case 'dice': return 'bg-[#081018]';
+        default: return 'bg-background';
+    }
+  }
+
+  const renderMainContent = () => {
+    switch (currentView) {
+      case 'home':
+        return (
+          <div className="max-w-7xl mx-auto space-y-8">
+            <Hero />
+            <LastWinners />
+            <OriginalsRow onGameSelect={handleGameSelect} />
+            <GameGrid />
+          </div>
+        );
+      case 'crash':
+        return <CrashGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
+      case 'mines':
+        return <MinesGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
+      case 'roulette':
+        return <RouletteGamePage 
+                    profile={profile}
+                    session={session}
+                    onProfileUpdate={handleProfileUpdate}
+                    onNavigate={() => {}}
+                />;
+      case 'dice':
+        return <DiceGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
+      default: // Profile pages
+        return (
+            <ProfilePage
+                profile={profile}
+                onProfileUpdate={handleProfileUpdate}
+                activePage={currentView}
+                setActivePage={(page) => setCurrentView(page)}
+            />
+        );
+    }
+  };
+
+  return (
+    <div className={`h-screen font-sans text-text-main ${getAppBgClass()}`}>
+      <AuthModal 
+        show={showAuthModal} 
+        onClose={() => setShowAuthModal(false)}
+        view={authView}
+        setView={setAuthView}
+      />
+      <WalletModal show={isWalletModalOpen} onClose={() => setIsWalletModalOpen(false)} />
+      <TipUserModal
+        show={!!tipRecipient}
+        onClose={() => setTipRecipient(null)}
+        recipient={tipRecipient}
+        onTipped={handleProfileUpdate}
+      />
+
+      <div className="flex h-screen">
+          <div className="flex-1 min-w-0 flex flex-col">
+              <Header
+                session={session}
+                profile={profile}
+                onSignInClick={() => openAuthModal('signIn')}
+                onSignUpClick={() => openAuthModal('signUp')}
+                onWalletButtonClick={() => setIsWalletModalOpen(true)}
+                onNavigate={(page) => setCurrentView(page as View)}
+                currentView={currentView}
+                onChatToggle={() => setIsChatOpen(true)}
+              />
+              <main className="flex-1 overflow-y-auto no-scrollbar p-6 lg:p-8">
+                {renderMainContent()}
+              </main>
+          </div>
+          
+          {/* Desktop Chat Rail */}
+          <div className="hidden xl:block w-[320px] flex-shrink-0">
+            <div className="sticky top-0 h-screen">
+                <ChatRail session={session} onTipUser={setTipRecipient} />
+            </div>
+          </div>
+
+          {/* Mobile Chat Overlay */}
+          <div className={`fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out xl:hidden ${ isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+              <div className="absolute inset-0 bg-black/50" onClick={() => setIsChatOpen(false)}></div>
+              <div className="relative w-[320px] h-full float-right">
+                <ChatRail session={session} onClose={() => setIsChatOpen(false)} onTipUser={setTipRecipient} />
+              </div>
+          </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
