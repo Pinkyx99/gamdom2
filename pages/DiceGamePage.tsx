@@ -139,7 +139,7 @@ const DiceGamePage: React.FC<{
                 if (fetchError) throw new Error(fetchError.message);
                 if (!currentProfile) throw new Error("Could not find user profile to update balance.");
 
-                const newBalance = (Number(currentProfile.balance) || 0) + payout;
+                const newBalance = (parseFloat(String(currentProfile.balance)) || 0) + payout;
                 const { error: payoutError } = await supabase
                     .from('profiles')
                     .update({ balance: newBalance })

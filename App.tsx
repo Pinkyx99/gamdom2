@@ -31,19 +31,51 @@ const App: React.FC = () => {
   const getProfile = useCallback(async (session: Session) => {
     try {
       const { user } = session;
-      const { data, error, status } = await supabase
+      let { data, error, status } = await supabase
         .from('profiles')
         .select(`id, username, avatar_url, balance, wagered, games_played, has_claimed_welcome_bonus`)
         .eq('id', user.id)
         .single();
 
-      if (error && status !== 406) throw error;
+      // The user exists in auth.users but not in profiles table.
+      // This happens when a user signs up via OAuth for the first time.
+      if (error && status === 406) {
+        console.log('No profile found for user, creating one.');
+        
+        const { data: newUserProfile, error: insertError } = await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
+            // Extract username and avatar from OAuth provider's metadata
+            username: user.user_metadata.full_name || user.user_metadata.name || user.email.split('@')[0],
+            avatar_url: user.user_metadata.avatar_url,
+            // Set initial values for other fields
+            balance: 0,
+            wagered: 0,
+            games_played: 0,
+            has_claimed_welcome_bonus: false,
+          })
+          .select()
+          .single();
+        
+        if (insertError) {
+          throw insertError;
+        }
+
+        // We have the newly created profile data now.
+        data = newUserProfile;
+      } else if (error) {
+        // For other errors, we should throw them.
+        throw error;
+      }
 
       if (data) {
+        // Set the profile state with the fetched or newly created profile.
         setProfile({ ...data, email: user.email || '' });
       }
     } catch (error) {
-      console.log('Error fetching profile:', error);
+      console.log('Error getting/creating profile:', error);
+      alert('There was an issue loading your profile.');
     }
   }, []);
   

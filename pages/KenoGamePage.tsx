@@ -124,7 +124,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                 }
 
                 // FIX: Safely cast `currentProfile.balance` from `unknown` to `number` before performing arithmetic.
-                const newBalance = (parseFloat(String(currentProfile.balance)) || 0) + payout;
+                const newBalance = (Number(currentProfile.balance) || 0) + payout;
                 
                 const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);
                 if (payoutError) throw payoutError;
