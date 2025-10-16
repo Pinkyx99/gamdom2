@@ -1,4 +1,5 @@
 
+
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Profile } from '../types';
 import { Session } from '@supabase/supabase-js';
@@ -63,24 +64,29 @@ const DiceGamePage: React.FC<{
         } else {
             chance = rollValue;
         }
-        chance = Math.max(0.01, Math.min(99.99, chance));
+        chance = Math.max(0.02, Math.min(98.01, chance));
 
         const mult = (100 * (1 - HOUSE_EDGE)) / chance;
         return {
             winChance: chance,
-            multiplier: Math.min(9900, Math.max(1.0102, mult)),
+            multiplier: Math.min(4950, Math.max(1.0101, mult)),
         };
     }, [rollValue, isRollOver]);
     
     const profitOnWin = useMemo(() => betAmount * (multiplier - 1), [betAmount, multiplier]);
 
     const handleRollValueChange = useCallback((newValue: number) => {
-        const clampedValue = Math.max(0.01, Math.min(99.99, newValue));
+        let clampedValue;
+        if (isRollOver) {
+            clampedValue = Math.max(1.99, Math.min(99.98, newValue));
+        } else {
+            clampedValue = Math.max(0.02, Math.min(98.01, newValue));
+        }
         setRollValue(clampedValue);
-    }, []);
+    }, [isRollOver]);
 
     const handleMultiplierChange = useCallback((newMultiplier: number) => {
-        const clampedMultiplier = Math.max(1.0102, Math.min(9900, newMultiplier));
+        const clampedMultiplier = Math.max(1.0101, Math.min(4950, newMultiplier));
         const newWinChance = (100 * (1 - HOUSE_EDGE)) / clampedMultiplier;
         
         if (isRollOver) {

@@ -27,20 +27,7 @@ export const Hero: React.FC<HeroProps> = ({ onSignUpClick, onGoogleSignInClick }
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent rounded-2xl"></div>
             
             <div className="relative z-10">
-                {/* Top section: User info & Big Win tag */}
-                <div className="flex items-center space-x-3">
-                    <div className="flex items-center space-x-2 bg-black/50 p-1.5 pr-4 rounded-full">
-                        <img src="https://i.imgur.com/L4pP31z.png" alt="VTRAIN83 avatar" className="w-8 h-8 rounded-full" />
-                        <div>
-                            <p className="text-white font-bold text-sm">VTRAIN83</p>
-                            <p className="text-primary-light font-bold text-sm">⚡ 40,000</p>
-                        </div>
-                    </div>
-                    <div className="bg-pink-500/80 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full flex items-center space-x-1">
-                        <span>💰</span>
-                        <span>Big Win</span>
-                    </div>
-                </div>
+                {/* This empty div is kept to maintain the flexbox structure but the content has been removed. */}
             </div>
 
             <div className="relative z-10 flex justify-between items-end">
