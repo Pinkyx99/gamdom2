@@ -1,23 +1,6 @@
-import React, { useRef, useState, useEffect, useLayoutEffect, useCallback } from 'react';
+import React, { useRef, useState, useLayoutEffect, useCallback } from 'react';
 import { ORIGINAL_GAMES } from '../constants';
-
-const OriginalGameCard: React.FC<{ game: (typeof ORIGINAL_GAMES)[0], onGameSelect: (name: string) => void }> = ({ game, onGameSelect }) => (
-    <div 
-      className="card flex-shrink-0 cursor-pointer"
-      onClick={() => {
-        if (game.comingSoon) {
-            alert('Coming Soon!');
-        } else {
-            onGameSelect(game.name);
-        }
-      }}
-    >
-        <div className="blob" style={{ backgroundColor: game.blobColor }} />
-        <div className="bg">
-            <img src={game.image} alt={game.name} className="w-full h-full object-cover"/>
-        </div>
-    </div>
-);
+import ProfileCard from './ProfileCard';
 
 const ArrowButton: React.FC<{ direction: 'left' | 'right', onClick: () => void, visible: boolean }> = ({ direction, onClick, visible }) => (
     <button
@@ -97,7 +80,23 @@ export const OriginalsRow: React.FC<{ onGameSelect: (name: string) => void }> = 
                         }}
                     >
                         {ORIGINAL_GAMES.map(game => (
-                            <OriginalGameCard key={game.name} game={game} onGameSelect={onGameSelect} />
+                             <div
+                                key={game.name}
+                                className="flex-shrink-0"
+                                onClick={() => {
+                                    if (game.comingSoon) {
+                                        alert('Coming Soon!');
+                                    } else {
+                                        onGameSelect(game.name);
+                                    }
+                                }}
+                            >
+                                <ProfileCard
+                                    avatarUrl={game.image}
+                                    name={game.name}
+                                    comingSoon={game.comingSoon}
+                                />
+                            </div>
                         ))}
                     </div>
                 </div>
