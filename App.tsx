@@ -3,10 +3,9 @@ import { Header } from './components/Header';
 import { Hero } from './components/HeroCarousel';
 import { AuthModal } from './components/AuthModal';
 import { supabase } from './lib/supabaseClient';
-import { Session } from '@supabase/supabase-js';
+import { Session, Provider } from '@supabase/supabase-js';
 import { Profile, ProfileLink } from './types';
 import { WalletModal } from './components/WalletModal';
-import { LastWinners } from './components/CategoryCards';
 import { OriginalsRow } from './components/OriginalsRow';
 import { GameGrid } from './components/GameGrid';
 import ProfilePage from './pages/ProfilePage';
@@ -34,7 +33,7 @@ const App: React.FC = () => {
       const { user } = session;
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`id, username, avatar_url, balance, wagered, games_played`)
+        .select(`id, username, avatar_url, balance, wagered, games_played, has_claimed_welcome_bonus`)
         .eq('id', user.id)
         .single();
 
@@ -71,6 +70,21 @@ const App: React.FC = () => {
     setAuthView(view);
     setShowAuthModal(true);
   };
+  
+  const handleOAuthSignIn = async (provider: Provider) => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        queryParams: {
+          prompt: 'select_account',
+        },
+      },
+    });
+    if (error) {
+        console.error("OAuth sign-in error:", error);
+        alert(`OAuth sign-in error: ${error.message}`);
+    }
+  };
 
   const handleProfileUpdate = useCallback(() => {
     if (session) getProfile(session);
@@ -86,7 +100,7 @@ const App: React.FC = () => {
   const getAppBgClass = () => {
     switch(currentView) {
         case 'crash': return 'bg-[#0F1923]';
-        case 'mines': return 'bg-[#0b1016]';
+        case 'mines': return 'bg-[#06080f]';
         case 'roulette': return 'bg-[#0D1316]';
         case 'dice': return 'bg-[#081018]';
         default: return 'bg-background';
@@ -98,8 +112,7 @@ const App: React.FC = () => {
       case 'home':
         return (
           <div className="max-w-7xl mx-auto space-y-8">
-            <Hero />
-            <LastWinners />
+            <Hero onSignUpClick={() => openAuthModal('signUp')} onGoogleSignInClick={() => handleOAuthSignIn('google')} />
             <OriginalsRow onGameSelect={handleGameSelect} />
             <GameGrid />
           </div>
@@ -156,6 +169,7 @@ const App: React.FC = () => {
                 onNavigate={(page) => setCurrentView(page as View)}
                 currentView={currentView}
                 onChatToggle={() => setIsChatOpen(true)}
+                onProfileUpdate={handleProfileUpdate}
               />
               <main className="flex-1 overflow-y-auto no-scrollbar p-6 lg:p-8">
                 {renderMainContent()}

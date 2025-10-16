@@ -54,27 +54,22 @@ export const GoogleIcon: React.FC<{ className?: string }> = ({ className }) => (
     </svg>
 );
 
-// FIX: Added missing SteamIcon
 export const SteamIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2.25c5.385 0 9.75 4.365 9.75 9.75s-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12 6.615 2.25 12 2.25zm5.016 4.908l-5.78 3.337c-.43.248-.71.722-.71 1.254v.002c0 .531.28.995.71 1.254l5.78 3.337c.43.248.97.01 1.218-.42l1.636-2.833c.248-.43.01-.97-.42-1.218l-3.337-1.928 3.337-1.928c.43-.248.668-.788.42-1.218l-1.636-2.833c-.248-.43-.788-.668-1.218-.42zM9.98 12.38l-2.07-.803c-.35-.136-.35-.65 0-.786l2.07-.803c.35-.136.72.115.72.5v.893c0 .385-.37.636-.72.5z"/></svg>
 );
 
-// FIX: Added missing TelegramIcon
 export const TelegramIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.62 11.93c-.58-.19-.59-.54.1-.73l15.6-5.99c.51-.2 1.01.17 1.01.73l-2.43 11.49c-.19.92-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.85.42z"/></svg>
 );
 
-// FIX: Added missing UploadIcon
 export const UploadIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
 );
 
-// FIX: Added missing BellIcon
 export const BellIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
 );
 
-// FIX: Added missing game and stat icons
 export const ChartBarIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
 );
@@ -100,7 +95,6 @@ export const UsdIcon: React.FC<{ className?: string }> = (props) => (
     <div {...props} className={`w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm ${props.className}`}>$</div>
 );
 
-// FIX: Added missing Roulette icons
 export const MutedSoundIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5L6 9H2v6h4l5 10V5zM23 9l-6 6M17 9l6 6"></path></svg>
 );
@@ -111,17 +105,13 @@ export const CheckCircleIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
 );
 
-// FIX: Added missing Rewards icons
 export const RankIcon: React.FC<{ tier: string, className?: string }> = ({ tier, className }) => {
-    // In a real app, this would return different SVG paths based on tier.
-    // For this fix, we'll return a generic shield.
     return <svg className={className} viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
 };
 export const LockIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
 );
 
-// FIX: Added missing ProfileLink icons
 export const UserCircleIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>);
 export const ArrowsRightLeftIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 12L3 8m4 4l4-4m6 12v-4m0 4l4-4m-4 4l-4-4" /></svg>);
 export const CogIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>);
@@ -129,8 +119,6 @@ export const UsersIcon: React.FC<{ className?: string }> = (props) => (<svg {...
 export const ShieldCheckIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 20.944a11.955 11.955 0 019-2.611m8.618-3.04A12.02 12.02 0 0121 20.944a11.955 11.955 0 01-9-17.611z" /></svg>);
 export const ArrowRightOnRectangleIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>);
 
-
-// Keep this one for AuthModal if it's still used
 export const LogoIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg className={className} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path fillRule="evenodd" clipRule="evenodd" d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21ZM16.0353 9.5C16.0353 8.39543 15.1399 7.5 14.0353 7.5H11.0353V16.5H14.0353C15.1399 16.5 16.0353 15.6046 16.0353 14.5V13.8333C16.0353 13.3728 15.6625 13 15.202 13H12.698V11H15.202C15.6625 11 16.0353 10.6272 16.0353 10.1667V9.5Z" fill="currentColor"/>
@@ -140,3 +128,32 @@ export const LogoIcon: React.FC<{ className?: string }> = ({ className }) => (
 export const ChatBubbleIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
 );
+
+// --- START OF MINES GAME ICONS ---
+export const MinesLogoIcon: React.FC = () => (
+    <div className="relative font-serif font-bold text-5xl text-[#14a363]" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.7)' }}>
+        M<span className="relative">i<span className="absolute -top-3 -right-1 text-2xl">💣</span></span>nes
+    </div>
+);
+export const GamdomLogoIcon: React.FC = () => (
+    <div className="flex items-center space-x-2">
+        <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0L0 6V18L12 28L24 18V6L12 0Z" fill="#17d182"/>
+            <path d="M12 4L4 8V16L12 24L20 16V8L12 4Z" fill="#0f1519"/>
+            <path d="M12 7L7 10V14L12 21L17 14V10L12 7Z" fill="#17d182"/>
+        </svg>
+        <span className="font-sans font-bold text-white text-lg">Gamdom</span>
+    </div>
+);
+
+export const SoundIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>);
+export const LightningIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>);
+export const CalendarIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>);
+export const ClockIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>);
+export const CheckIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>);
+export const QuestionIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>);
+
+export const FortressIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="currentColor"><path d="M20,11V7h-2V4h-3V1h-2v3h-2V1H9v3H6v3H4v4H1v5h3v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h3v-5H20z M16,9h-2V7h2V9z M10,9H8V7h2V9z"/></svg>);
+export const GemIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 8.5L12 22L22 8.5L12 2Z" fill="currentColor"/><path d="M2 8.5L12 12L22 8.5" stroke="white" strokeOpacity="0.5" strokeWidth="0.5"/><path d="M12 22V12" stroke="white" strokeOpacity="0.5" strokeWidth="0.5"/></svg>);
+export const MineIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="currentColor"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" /><path d="M12,5a1,1,0,0,0-1,1v2a1,1,0,0,0,2,0V6A1,1,0,0,0,12,5Z" /><path d="M12,15a1,1,0,0,0-1,1v2a1,1,0,0,0,2,0V16A1,1,0,0,0,12,15Z" /><path d="M18,11H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" /><path d="M8,11H6a1,1,0,0,0,0,2H8a1,1,0,0,0,0-2Z" /><path d="M16.95,6.05a1,1,0,0,0-1.41,0l-1.42,1.42a1,1,0,0,0,1.41,1.41L17,7.46A1,1,0,0,0,16.95,6.05Z" /><path d="M8.46,15.54a1,1,0,0,0-1.41,0L5.64,16.95a1,1,0,0,0,1.41,1.41l1.41-1.41A1,1,0,0,0,8.46,15.54Z" /><path d="M16.95,16.95a1,1,0,0,0,0-1.41L15.54,14.13a1,1,0,0,0-1.41,1.41l1.41,1.41A1,1,0,0,0,16.95,16.95Z" /><path d="M8.46,7.46A1,1,0,0,0,7.05,6.05L5.64,7.46A1,1,0,0,0,7.05,8.87l1.41-1.41Z" /></svg>);
+// --- END OF MINES GAME ICONS ---

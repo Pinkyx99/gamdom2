@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { GoogleIcon } from './icons';
 
@@ -10,7 +9,12 @@ const SmallGameCard: React.FC<{ name: string, image: string, active?: boolean }>
     </div>
 );
 
-export const Hero: React.FC = () => {
+interface HeroProps {
+    onSignUpClick: () => void;
+    onGoogleSignInClick: () => void;
+}
+
+export const Hero: React.FC<HeroProps> = ({ onSignUpClick, onGoogleSignInClick }) => {
     const games = [
         { name: 'Release the Kraken', image: 'https://i.imgur.com/N0lFc8l.jpeg', active: false },
         { name: 'Twilight Princess', image: 'https://i.imgur.com/nxsDFGh.jpeg', active: true },
@@ -50,11 +54,14 @@ export const Hero: React.FC = () => {
                         <span>2.4k players play now</span>
                     </div>
                     <div className="mt-6 flex items-center space-x-4">
-                        <button className="bg-white hover:bg-gray-200 text-black font-semibold px-6 py-3 rounded-lg text-sm transition">
-                            Register and Play for Free
+                        <button 
+                            onClick={onSignUpClick}
+                            className="bg-white hover:bg-gray-200 text-black font-semibold px-6 py-3 rounded-lg text-sm transition"
+                        >
+                            Sign Up Now
                         </button>
-                        <span className="text-text-muted">or register with</span>
-                        <button className="w-10 h-10 flex items-center justify-center bg-card rounded-full hover:bg-card/70">
+                        <span className="text-text-muted">or join with</span>
+                        <button onClick={onGoogleSignInClick} className="w-10 h-10 flex items-center justify-center bg-card rounded-full hover:bg-card/70">
                             <GoogleIcon className="w-5 h-5"/>
                         </button>
                     </div>

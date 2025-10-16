@@ -1,5 +1,5 @@
 import React from 'react';
-import { SidebarNavItem, Winner, ProfileLink, RoyaltyRank, Game } from './types';
+import { SidebarNavItem, ProfileLink, RoyaltyRank, Game } from './types';
 import { HomeIcon, PromotionsIcon, LeaderboardIcon, ChallengesIcon, InstantPayoutIcon, SocialCasinoIcon, SportsIcon, CustomerHelpIcon, FaqIcon, UserCircleIcon, ChartBarIcon, ArrowsRightLeftIcon, BellIcon, CogIcon, UsersIcon, ShieldCheckIcon, ArrowRightOnRectangleIcon, DiceIcon, CrashIcon, RouletteIcon, PlinkoIcon, MinesIcon } from './components/icons';
 import { UsdIcon, GoogleIcon } from './components/icons';
 
@@ -17,15 +17,6 @@ export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
 export const SIDEBAR_BOTTOM_NAV_ITEMS: SidebarNavItem[] = [
   { name: 'Customer Help', href: '#', icon: CustomerHelpIcon },
   { name: 'FAQs', href: '#', icon: FaqIcon },
-];
-
-export const LAST_WINNERS: Winner[] = [
-  { id: 1, username: 'VTRAIN83', avatar: 'https://i.imgur.com/L4pP31z.png', amount: 4000, gameIcon: 'https://i.imgur.com/OqVfUkw.png' },
-  { id: 2, username: 'VTRAIN83', avatar: 'https://i.imgur.com/L4pP31z.png', amount: 4000, gameIcon: 'https://i.imgur.com/G5Sy5yL.png' },
-  { id: 3, username: 'VTRAIN83', avatar: 'https://i.imgur.com/L4pP31z.png', amount: 4000, gameIcon: 'https://i.imgur.com/4lXAn4g.png' },
-  { id: 4, username: 'VTRAIN83', avatar: 'https://i.imgur.com/L4pP31z.png', amount: 4000, gameIcon: 'https://i.imgur.com/4qF3A4x.png' },
-  { id: 5, username: 'VTRAIN83', avatar: 'https://i.imgur.com/L4pP31z.png', amount: 4000, gameIcon: 'https://i.imgur.com/OqVfUkw.png' },
-  { id: 6, username: 'VTRAIN83', avatar: 'https://i.imgur.com/L4pP31z.png', amount: 4000, gameIcon: 'https://i.imgur.com/G5Sy5yL.png' },
 ];
 
 // FIX: Added missing constants for WalletDropdown

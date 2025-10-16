@@ -1,10 +1,11 @@
-import React from 'react';
-import { SearchIcon, Logo, ChatBubbleIcon } from './icons';
+import React, { useState, useRef, useEffect } from 'react';
+import { SearchIcon, Logo, ChatBubbleIcon, BellIcon } from './icons';
 import { Session } from '@supabase/supabase-js';
 import { Profile, ProfileLink } from '../types';
 import { supabase } from '../lib/supabaseClient';
 import { Wallet } from './Wallet';
 import { ProfileDropdown } from './ProfileDropdown';
+import { NotificationsDropdown } from './NotificationsDropdown';
 
 interface HeaderProps {
     session: Session | null;
@@ -15,9 +16,27 @@ interface HeaderProps {
     onNavigate: (page: ProfileLink['name'] | 'home') => void;
     currentView: string;
     onChatToggle: () => void;
+    onProfileUpdate: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick, onSignUpClick, onWalletButtonClick, onNavigate, currentView, onChatToggle }) => {
+export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick, onSignUpClick, onWalletButtonClick, onNavigate, currentView, onChatToggle, onProfileUpdate }) => {
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const notificationsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
+            setIsNotificationsOpen(false);
+        }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const hasUnclaimedBonus = profile && !profile.has_claimed_welcome_bonus;
+
   return (
     <header className="flex-shrink-0">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -44,6 +63,21 @@ export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick,
           <div className="flex items-center space-x-2">
             {session && profile ? (
               <>
+                <div ref={notificationsRef} className="relative">
+                    <button onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} className="p-2 rounded-full hover:bg-white/10 transition-colors text-text-muted hover:text-white relative">
+                        <BellIcon className="w-6 h-6" />
+                        {hasUnclaimedBonus && (
+                            <span className="absolute top-1 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-background"></span>
+                        )}
+                    </button>
+                    <NotificationsDropdown 
+                        show={isNotificationsOpen}
+                        onClose={() => setIsNotificationsOpen(false)}
+                        hasUnclaimedBonus={hasUnclaimedBonus}
+                        onProfileUpdate={onProfileUpdate}
+                    />
+                </div>
+
                 <Wallet onWalletButtonClick={onWalletButtonClick} balance={profile.balance} />
                 <ProfileDropdown 
                     profile={profile} 

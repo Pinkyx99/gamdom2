@@ -1,9 +1,9 @@
 
 
-
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { LogoIcon, SteamIcon, GoogleIcon, TelegramIcon } from './icons';
+import { Provider } from '@supabase/supabase-js';
 
 interface AuthModalProps {
   show: boolean;
@@ -60,10 +60,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, view, setVi
     }
   };
   
-  const socialProviders = [
-      { name: 'Steam', icon: <SteamIcon className="w-5 h-5"/> },
-      { name: 'Google', icon: <GoogleIcon className="w-5 h-5"/> },
-      { name: 'Telegram', icon: <TelegramIcon className="w-5 h-5"/> },
+  const handleOAuthSignIn = async (provider: Provider) => {
+    setLoading(true);
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        // The redirectTo URL should be configured in your Supabase project's auth settings.
+        // It defaults to the current page URL.
+        queryParams: {
+          prompt: 'select_account',
+        },
+      },
+    });
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+    // On success, the browser will redirect, so no need to set loading to false.
+  };
+
+  // FIX: Changed `JSX.Element` to `React.ReactElement` to resolve the 'Cannot find namespace JSX' error. `React.ReactElement` is a valid type provided by the React import.
+  const socialProviders: { name: string; icon: React.ReactElement; providerKey: Provider }[] = [
+      { name: 'Steam', icon: <SteamIcon className="w-5 h-5"/>, providerKey: 'steam' },
+      { name: 'Google', icon: <GoogleIcon className="w-5 h-5"/>, providerKey: 'google' },
+      { name: 'Telegram', icon: <TelegramIcon className="w-5 h-5"/>, providerKey: 'telegram' },
   ];
 
   if (!show) {
@@ -134,7 +155,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, view, setVi
 
             <div className="grid grid-cols-3 gap-4">
                 {socialProviders.map(provider => (
-                     <button key={provider.name} className="flex items-center justify-center space-x-2 bg-background p-3 rounded-md border border-outline hover:bg-white/5 transition-colors">
+                     <button 
+                        key={provider.name}
+                        type="button"
+                        onClick={() => handleOAuthSignIn(provider.providerKey)}
+                        disabled={loading}
+                        className="flex items-center justify-center space-x-2 bg-background p-3 rounded-md border border-outline hover:bg-white/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
                         {provider.icon}
                         <span className="text-sm font-medium text-white">{provider.name}</span>
                     </button>

@@ -1,74 +1,78 @@
-
-
 import React from 'react';
+import { FortressIcon, GemIcon, MineIcon } from '../icons';
 
 interface MinesGridProps {
     gridState: ('hidden' | 'gem' | 'mine')[];
     onTileClick: (index: number) => void;
-    gameState: 'idle' | 'playing' | 'busted' | 'cashed_out';
+    gameState: 'idle' | 'playing' | 'busted';
 }
 
 const Tile: React.FC<{
     state: 'hidden' | 'gem' | 'mine';
     onClick: () => void;
-    disabled: boolean;
-    isFinished: boolean;
-}> = ({ state, onClick, disabled, isFinished }) => {
+    isRevealed: boolean;
+    gameState: MinesGridProps['gameState'];
+}> = React.memo(({ state, onClick, isRevealed, gameState }) => {
     
-    // Increased rounding for a "smoother" feel
-    const baseStyle = "aspect-square rounded-xl flex items-center justify-center transition-all duration-300 ease-in-out transform focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50";
-    
-    let content, styles, buttonDisabled = disabled;
+    const isPlaying = gameState === 'playing';
+    const isFinished = gameState === 'busted';
 
-    switch (state) {
+    let content = null;
+    let baseClasses = 'w-24 h-24 rounded-lg relative transition-all duration-300 ease-in-out transform';
+    let buttonDisabled = !isPlaying || isRevealed;
+
+    switch(state) {
         case 'gem':
-            // New coin image, filling the tile with some padding
-            content = <img src="https://i.imgur.com/WAV1sfy.png" alt="Gem" className="w-full h-full object-contain p-2" />;
-            styles = "bg-green-500/20 border-2 border-green-500 scale-105 shadow-lg shadow-green-500/20";
-            buttonDisabled = true;
+            baseClasses += ' bg-[#2f4553] scale-105';
+            content = <div className="animate-reveal"><GemIcon className="w-12 h-12 text-cyan-300" /></div>;
             break;
         case 'mine':
-            // Bomb image, filling the tile with some padding
-            content = <img src="https://i.imgur.com/tmH7NTA.png" alt="Mine" className="w-full h-full object-contain p-2" />;
-            styles = "bg-red-500/20 border-2 border-red-500 scale-105 shadow-lg shadow-red-500/20 animate-pulse";
-            buttonDisabled = true;
+            baseClasses += ' bg-red-800/60 scale-105';
+            content = <div className="animate-reveal"><MineIcon className="w-12 h-12 text-red-400" /></div>;
             break;
         case 'hidden':
         default:
-            content = <img src="https://i.imgur.com/A6bw8ao.png" alt="Hidden tile" className="w-full h-full object-cover rounded-xl" />;
-            // Added white glow on hover
-            styles = `p-0 ${disabled ? 'cursor-not-allowed' : 'hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]'} ${isFinished ? 'opacity-40' : ''}`;
+            baseClasses += ' bg-gradient-to-br from-[#404c58] to-[#242c34] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-2px_4px_rgba(0,0,0,0.2)]';
+            content = <FortressIcon className="w-12 h-12 text-[#242c34]" />;
+            if (isFinished) {
+                baseClasses += ' opacity-50'; // Unrevealed tiles are faded on game end
+            } else if (isPlaying) {
+                baseClasses += ' cursor-pointer hover:brightness-110 hover:-translate-y-1';
+            }
             break;
     }
 
     return (
-        <button 
-            onClick={onClick} 
-            disabled={buttonDisabled} 
-            className={`${baseStyle} ${styles}`}
-            aria-label={state === 'hidden' ? 'Reveal tile' : state}
-        >
-            {content}
+        <button onClick={onClick} disabled={buttonDisabled} className={baseClasses} aria-label={`Tile ${state}`}>
+            <div className="w-full h-full flex items-center justify-center">
+                {content}
+            </div>
+            <style>{`
+                @keyframes reveal {
+                    0% { transform: scale(0.5); opacity: 0; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+                .animate-reveal {
+                    animation: reveal 0.3s ease-out;
+                }
+            `}</style>
         </button>
     );
-}
+});
+
 
 export const MinesGrid: React.FC<MinesGridProps> = ({ gridState, onTileClick, gameState }) => {
-    const isFinished = gameState === 'busted' || gameState === 'cashed_out';
     return (
-        // Increased container size and gap to make tiles bigger
-        <div className="w-full max-w-lg lg:w-[520px] flex-shrink-0">
-            <div className="grid grid-cols-5 gap-3 lg:gap-4 p-3 bg-black/40 backdrop-blur-sm rounded-xl border border-gray-700/50">
-                {gridState.map((state, index) => (
-                    <Tile 
-                        key={index} 
-                        state={state} 
-                        onClick={() => onTileClick(index)}
-                        disabled={gameState !== 'playing' || state !== 'hidden'}
-                        isFinished={isFinished}
-                    />
-                ))}
-            </div>
+        <div className="grid grid-cols-5 gap-3">
+            {gridState.map((state, index) => (
+                <Tile 
+                    key={index}
+                    state={state}
+                    onClick={() => onTileClick(index)}
+                    isRevealed={state !== 'hidden'}
+                    gameState={gameState}
+                />
+            ))}
         </div>
     );
 };

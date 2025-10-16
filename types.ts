@@ -8,14 +8,6 @@ export interface SidebarNavItem {
   isDropdown?: boolean;
 }
 
-export interface Winner {
-  id: number;
-  username: string;
-  avatar: string;
-  amount: number;
-  gameIcon: string;
-}
-
 export interface Profile {
   id: string;
   username: string;
@@ -24,6 +16,7 @@ export interface Profile {
   email: string;
   wagered: number;
   games_played: number;
+  has_claimed_welcome_bonus: boolean;
 }
 
 // FIX: Added missing ProfileLink type definition
@@ -136,4 +129,12 @@ export interface ChatMessage {
     username: string;
     avatar_url: string;
   };
+}
+
+export interface MinesRoundResult {
+    id: string;
+    betAmount: number;
+    cashedOutAt: number | null; // gems found
+    payout: number;
+    busted: boolean;
 }
