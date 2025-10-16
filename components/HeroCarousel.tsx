@@ -1,27 +1,12 @@
 import React from 'react';
 import { GoogleIcon } from './icons';
 
-const SmallGameCard: React.FC<{ name: string, image: string, active?: boolean }> = ({ name, image, active }) => (
-    <div className={`relative rounded-xl overflow-hidden cursor-pointer flex-shrink-0 w-28 h-36 ${active ? 'ring-2 ring-primary shadow-glow-primary' : ''}`}>
-        <img src={image} alt={name} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-        <p className="absolute bottom-2 left-2 right-2 text-white font-bold text-sm leading-tight uppercase">{name}</p>
-    </div>
-);
-
 interface HeroProps {
     onSignUpClick: () => void;
     onGoogleSignInClick: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({ onSignUpClick, onGoogleSignInClick }) => {
-    const games = [
-        { name: 'Release the Kraken', image: 'https://i.imgur.com/N0lFc8l.jpeg', active: false },
-        { name: 'Twilight Princess', image: 'https://i.imgur.com/nxsDFGh.jpeg', active: true },
-        { name: 'Book of Cats', image: 'https://i.imgur.com/H2vXi9M.jpeg', active: false },
-        { name: 'Badge Blitz', image: 'https://i.imgur.com/9uZRo6a.jpeg', active: false },
-    ];
-
     return (
         <div className="relative rounded-2xl p-6 lg:p-8 flex flex-col justify-between min-h-[450px] bg-cover" style={{backgroundImage: 'url(https://i.imgur.com/KRgJFwR.png)', backgroundPosition: 'center 30%'}}>
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent rounded-2xl"></div>
@@ -30,7 +15,7 @@ export const Hero: React.FC<HeroProps> = ({ onSignUpClick, onGoogleSignInClick }
                 {/* This empty div is kept to maintain the flexbox structure but the content has been removed. */}
             </div>
 
-            <div className="relative z-10 flex justify-between items-end">
+            <div className="relative z-10 flex justify-start items-end">
                 {/* Left section: Game Info & CTA */}
                 <div>
                     <h1 className="text-5xl lg:text-6xl font-black text-white" style={{textShadow: '0 4px 15px rgba(0,0,0,0.5)'}}>
@@ -52,19 +37,6 @@ export const Hero: React.FC<HeroProps> = ({ onSignUpClick, onGoogleSignInClick }
                             <GoogleIcon className="w-5 h-5"/>
                         </button>
                     </div>
-                </div>
-
-                {/* Right section: Game Carousel */}
-                <div className="hidden lg:flex items-center space-x-4">
-                    <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-transform hover:scale-110">
-                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
-                    </button>
-                    {games.map((game, index) => (
-                        <SmallGameCard key={index} {...game} />
-                    ))}
-                    <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-transform hover:scale-110">
-                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
-                    </button>
                 </div>
             </div>
         </div>
