@@ -124,7 +124,8 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                     throw new Error("Could not find user profile to update balance.");
                 }
 
-                const newBalance = (Number((currentProfile as any).balance) || 0) + payout;
+                // FIX: Cast `currentProfile.balance` to a number to handle potential 'unknown' type from Supabase client under strict settings.
+                const newBalance = (Number(currentProfile.balance as number) || 0) + payout;
                 
                 const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);
                 if (payoutError) throw payoutError;
