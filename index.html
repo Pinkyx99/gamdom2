@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Punt</title>
+    <title>Mihael.bet</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,6 +32,9 @@
             },
             borderColor: {
               'outline': 'rgba(100, 255, 218, 0.1)',
+            },
+            animation: {
+              'spin-slow': 'spin 3s linear infinite',
             }
           }
         }
@@ -163,6 +166,15 @@
       .btn-interactive:active {
         transform: translateY(0px) scale(0.98);
         transition-duration: 0.05s;
+      }
+      
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
       }
       /* END: General UI Animations */
     </style>

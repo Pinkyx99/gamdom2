@@ -98,12 +98,13 @@ export const ROYALTY_RANKS: RoyaltyRank[] = [
     { name: 'Gold I', tier: 'Gold', status: 'locked' },
 ];
 
-export const ORIGINAL_GAMES = [
+export const ORIGINAL_GAMES: ({ name: string; image: string; rtp: number; blobColor: string; comingSoon?: boolean })[] = [
   { name: 'Mines', image: 'https://i.imgur.com/GzQSFH0.png', rtp: 99, blobColor: '#64ffda' },
   { name: 'Crash', image: 'https://i.imgur.com/D4qpkPt.png', rtp: 99, blobColor: '#ef4444' },
   { name: 'Roulette', image: 'https://i.imgur.com/0rDInCq.png', rtp: 97.3, blobColor: '#8b5cf6' },
   { name: 'Dice', image: 'https://i.imgur.com/P6P4NCa.png', rtp: 99, blobColor: '#3b82f6' },
-  { name: 'Plinko', image: 'https://i.imgur.com/4lXAn4g.png', rtp: 99, blobColor: '#ec4899' },
+  { name: 'Slots', image: 'https://i.imgur.com/UQVF1x6.png', rtp: 96, blobColor: '#f59e0b', comingSoon: true },
+  { name: 'Keno', image: 'https://i.imgur.com/ESlUshO.png', rtp: 98, blobColor: '#a78bfa', comingSoon: true },
 ];
 
 export const GAMES: Game[] = [

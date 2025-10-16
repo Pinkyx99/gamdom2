@@ -16,6 +16,7 @@ import DiceGamePage from './pages/DiceGamePage';
 import { ChatRail } from './components/ChatRail';
 import { TipUserModal } from './components/TipUserModal';
 import { UserProfileModal } from './components/UserProfileModal';
+import { CogIcon } from './components/icons';
 
 type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | ProfileLink['name'];
 
@@ -125,7 +126,13 @@ const App: React.FC = () => {
           </div>
         );
       case 'crash':
-        return <CrashGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
+        return (
+          <div className="flex flex-col items-center justify-center h-full text-center text-text-muted p-8">
+            <CogIcon className="w-24 h-24 text-primary animate-spin-slow" />
+            <h1 className="mt-8 text-4xl font-bold text-white">Repairing...</h1>
+            <p className="mt-2 max-w-md">The Crash game is currently undergoing maintenance to improve your experience. Please check back later.</p>
+          </div>
+        );
       case 'mines':
         return <MinesGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
       case 'roulette':

@@ -1,11 +1,10 @@
 import React from 'react';
 
-// Re-styling LogoIcon to be text-based as "PUNT"
+// Re-styling LogoIcon to be text-based as "Mihael.bet"
 export const Logo: React.FC<{ className?: string }> = ({ className }) => (
-    <div className={`flex items-center font-black text-3xl tracking-tighter ${className}`}>
-        <span className="text-primary">P</span>
-        <span className="text-white">UNT</span>
-        <div className="w-2 h-2 bg-primary rounded-full ml-0.5 mb-2"></div>
+    <div className={`flex items-center font-black text-2xl tracking-tight ${className}`}>
+        <span className="text-white">Mihael</span>
+        <span className="text-primary">.bet</span>
     </div>
 );
 

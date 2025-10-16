@@ -1,6 +1,5 @@
-
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { supabase, supabaseUrl, supabaseAnonKey } from '../lib/supabaseClient';
 import { CrashRound, CrashBet, CrashHistoryItem, GameState } from '../types';
 import { Session } from '@supabase/supabase-js';
 
@@ -20,6 +19,36 @@ export const useRealtimeCrash = (session: Session | null, onProfileUpdate: () =>
     const animationFrameId = useRef<number | null>(null);
     const roundStateTimer = useRef<number | null>(null);
     const previousRoundId = useRef<string | null>(null);
+
+    // This effect acts as the game loop trigger. In a production environment,
+    // this would be a server-side cron job. For this demo, the client
+    // will periodically call the game_tick function to advance the state.
+    useEffect(() => {
+        const gameTicker = setInterval(async () => {
+            try {
+                const headers: HeadersInit = {
+                    'apikey': supabaseAnonKey,
+                };
+
+                const response = await fetch(`${supabaseUrl}/functions/v1/crash-tick`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: null, // Sending null body instead of empty JSON
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    throw new Error(errorData || 'Failed to tick game state');
+                }
+    
+            } catch (error: any) {
+                console.error('Error ticking crash game state:', error.message);
+            }
+        }, 2000); // Call every 2 seconds to advance the game state.
+
+        // Cleanup on component unmount
+        return () => clearInterval(gameTicker);
+    }, []); // This effect runs only once when the hook is mounted.
 
     // Fetch initial history
     useEffect(() => {
@@ -98,31 +127,20 @@ export const useRealtimeCrash = (session: Session | null, onProfileUpdate: () =>
             .subscribe();
 
         const initializeGame = async () => {
-             const fetchLatestRound = () => supabase
+             const { data, error } = await supabase
                 .from('crash_rounds')
                 .select('*')
                 .order('created_at', { ascending: false })
                 .limit(1)
                 .single();
             
-            let { data, error } = await fetchLatestRound();
-            
-            if (error && error.code !== 'PGRST116') {
+            if (error && error.code !== 'PGRST116') { // PGRST116 is "exact one row not found", which is fine
                 console.error("Error fetching initial round:", error);
                 setGameState('connecting');
                 return;
             }
             
-            const isStale = !data || (data.status === 'crashed' && data.ended_at && (Date.now() - new Date(data.ended_at).getTime() > (CRASHED_STATE_HOLD_MS + 2000)));
-            
-            if (isStale) {
-                const { error: rpcError } = await supabase.rpc('crash_game_tick');
-                if (rpcError) {
-                    console.error("Failed to kick server ticker:", rpcError);
-                    return;
-                }
-                 // After ticking, the subscription will pick up the new round.
-            } else if (data) {
+            if (data) {
                 processRoundUpdate(data as CrashRound);
             }
         };
