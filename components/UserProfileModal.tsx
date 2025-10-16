@@ -53,9 +53,9 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ userId, onCl
   const netProfit = userProfile ? (userProfile.wagered || 0) * -0.013 : 0;
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-backdrop" onClick={onClose}>
       <div 
-        className="bg-card w-full max-w-lg rounded-2xl shadow-2xl border border-outline p-6 relative"
+        className="bg-card w-full max-w-lg rounded-2xl shadow-2xl border border-outline p-6 relative modal-content"
         onClick={e => e.stopPropagation()}
       >
         <button onClick={onClose} className="absolute top-4 right-4 p-1 rounded-full text-text-muted hover:text-white hover:bg-white/10" aria-label="Close">

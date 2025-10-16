@@ -1,13 +1,14 @@
 import React from 'react';
 import { ORIGINAL_GAMES } from '../constants';
 
-const OriginalGameCard: React.FC<{ game: typeof ORIGINAL_GAMES[0], onGameSelect: (name: string) => void }> = ({ game, onGameSelect }) => (
-    <div className="relative group rounded-xl overflow-hidden cursor-pointer flex-shrink-0 w-48" onClick={() => onGameSelect(game.name)}>
-        <img src={game.image} alt={game.name} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-        <div className="absolute bottom-3 left-3">
-            <h3 className="text-white font-bold text-lg">{game.name}</h3>
-            <p className="text-sm text-green-400 font-semibold">{game.rtp}% RTP</p>
+const OriginalGameCard: React.FC<{ game: (typeof ORIGINAL_GAMES)[0], onGameSelect: (name: string) => void }> = ({ game, onGameSelect }) => (
+    <div 
+      className="card flex-shrink-0 cursor-pointer"
+      onClick={() => onGameSelect(game.name)}
+    >
+        <div className="blob" style={{ backgroundColor: game.blobColor }} />
+        <div className="bg">
+            <img src={game.image} alt={game.name} className="w-full h-full object-cover"/>
         </div>
     </div>
 );

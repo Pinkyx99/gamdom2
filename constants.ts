@@ -99,11 +99,11 @@ export const ROYALTY_RANKS: RoyaltyRank[] = [
 ];
 
 export const ORIGINAL_GAMES = [
-  { name: 'Mines', image: 'https://i.imgur.com/sIuPZZB.png', rtp: 99 },
-  { name: 'Crash', image: 'https://i.imgur.com/zFhctcn.png', rtp: 99 },
-  { name: 'Roulette', image: 'https://i.imgur.com/RRzhtn4.png', rtp: 97.3 },
-  { name: 'Dice', image: 'https://i.imgur.com/wuiuvtG.png', rtp: 99 },
-  { name: 'Plinko', image: 'https://i.imgur.com/4lXAn4g.png', rtp: 99 },
+  { name: 'Mines', image: 'https://i.imgur.com/GzQSFH0.png', rtp: 99, blobColor: '#64ffda' },
+  { name: 'Crash', image: 'https://i.imgur.com/D4qpkPt.png', rtp: 99, blobColor: '#ef4444' },
+  { name: 'Roulette', image: 'https://i.imgur.com/0rDInCq.png', rtp: 97.3, blobColor: '#8b5cf6' },
+  { name: 'Dice', image: 'https://i.imgur.com/P6P4NCa.png', rtp: 99, blobColor: '#3b82f6' },
+  { name: 'Plinko', image: 'https://i.imgur.com/4lXAn4g.png', rtp: 99, blobColor: '#ec4899' },
 ];
 
 export const GAMES: Game[] = [

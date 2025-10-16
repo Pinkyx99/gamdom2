@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { RouletteGameState } from '../../types';
+import { Switch } from '../profile/shared/Switch';
 
 interface RouletteControlsProps {
     betAmount: number;
@@ -17,7 +19,7 @@ const ControlButton: React.FC<{
     <button
         onClick={onClick}
         disabled={disabled}
-        className={`h-11 px-4 bg-[#212832] text-text-muted text-sm font-bold rounded-md hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition ${className}`}
+        className={`h-11 px-3 bg-[#212832] text-text-muted text-xs font-bold rounded-md hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition ${className}`}
     >
         {children}
     </button>
@@ -31,12 +33,9 @@ export const RouletteControls: React.FC<RouletteControlsProps> = ({ betAmount, s
         setBetAmount(isNaN(val) ? 0 : val);
     };
 
-    const handleModifier = (action: 'clear' | '+10' | '+50' | '+100' | '1/2' | 'x2' | 'max') => {
+    const handleModifier = (action: 'clear' | '1/2' | 'x2' | 'max') => {
         switch(action) {
             case 'clear': setBetAmount(0.01); break;
-            case '+10': setBetAmount(parseFloat((betAmount + 10).toFixed(2))); break;
-            case '+50': setBetAmount(parseFloat((betAmount + 50).toFixed(2))); break;
-            case '+100': setBetAmount(parseFloat((betAmount + 100).toFixed(2))); break;
             case '1/2': setBetAmount(Math.max(0.01, parseFloat((betAmount / 2).toFixed(2)))); break;
             case 'x2': setBetAmount(parseFloat((betAmount * 2).toFixed(2))); break;
             case 'max': setBetAmount(balance); break;
@@ -47,7 +46,7 @@ export const RouletteControls: React.FC<RouletteControlsProps> = ({ betAmount, s
 
     return (
         <div className="bg-[#1A222D] p-3 rounded-xl border border-outline">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-3">
                 {/* Bet Amount Input */}
                 <div className="flex-grow flex-shrink-0 basis-full sm:basis-48">
                     <label className="text-xs font-semibold text-text-muted mb-1 block">Your bet</label>
@@ -68,15 +67,13 @@ export const RouletteControls: React.FC<RouletteControlsProps> = ({ betAmount, s
 
                 {/* Modifier Buttons */}
                 <div className="flex-grow flex-shrink basis-auto flex items-end space-x-2">
-                     <ControlButton onClick={() => handleModifier('+10')} disabled={isBettingDisabled}>+$10</ControlButton>
-                     <ControlButton onClick={() => handleModifier('+50')} disabled={isBettingDisabled}>+$50</ControlButton>
-                     <ControlButton onClick={() => handleModifier('+100')} disabled={isBettingDisabled}>+$100</ControlButton>
                      <ControlButton onClick={() => handleModifier('1/2')} disabled={isBettingDisabled}>1/2</ControlButton>
                      <ControlButton onClick={() => handleModifier('x2')} disabled={isBettingDisabled}>x2</ControlButton>
                      <ControlButton onClick={() => handleModifier('max')} disabled={isBettingDisabled} className="bg-green-600/50 text-white">Max</ControlButton>
                 </div>
-                 <div className="flex-grow flex-shrink-0 basis-full sm:basis-32">
-                     <ControlButton onClick={() => {}} disabled={isBettingDisabled} className="w-full">Auto Bet <span className="ml-1 text-green-500">+</span></ControlButton>
+                 <div className="flex items-center space-x-2 ml-auto">
+                    <label htmlFor="autobet" className="text-sm font-semibold text-text-muted">Auto Bet</label>
+                    <Switch />
                  </div>
             </div>
         </div>

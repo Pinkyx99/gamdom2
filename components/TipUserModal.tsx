@@ -52,8 +52,8 @@ export const TipUserModal: React.FC<TipUserModalProps> = ({ show, onClose, recip
   };
   
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
-        <div className="bg-[#1A222D] w-full max-w-sm rounded-2xl shadow-2xl border border-outline p-6" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-backdrop" onClick={onClose}>
+        <div className="bg-[#1A222D] w-full max-w-sm rounded-2xl shadow-2xl border border-outline p-6 modal-content" onClick={e => e.stopPropagation()}>
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-white">Tip User</h2>

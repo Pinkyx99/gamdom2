@@ -102,13 +102,13 @@ export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick,
               <div className="flex items-center space-x-2">
                 <button
                   onClick={onSignInClick}
-                  className="px-6 py-2.5 rounded-lg text-white font-semibold text-sm transition bg-card hover:bg-card/70 border border-border-color"
+                  className="btn-interactive px-6 py-2.5 rounded-lg text-white font-semibold text-sm transition bg-card hover:bg-card/70 border border-border-color"
                 >
                   Log in
                 </button>
                 <button
                   onClick={onSignUpClick}
-                  className="bg-primary hover:bg-primary-light text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition"
+                  className="btn-interactive bg-primary hover:bg-primary-light text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition"
                 >
                   Sign up
                 </button>

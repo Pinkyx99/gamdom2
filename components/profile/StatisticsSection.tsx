@@ -38,7 +38,7 @@ export const StatisticsSection: React.FC<StatisticsSectionProps> = ({ profile })
         <SectionShell title="Statistics">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 {statsCards.map(card => (
-                    <div key={card.label} className="bg-card-bg/50 border border-outline rounded-lg p-4 flex items-center space-x-4">
+                    <div key={card.label} className="bg-card/50 border border-outline rounded-lg p-4 flex items-center space-x-4 transition-all duration-300 hover:bg-card hover:-translate-y-1">
                         <div className="w-12 h-12 bg-background rounded-full flex items-center justify-center">{card.icon}</div>
                         <div>
                             <p className="text-sm text-text-muted">{card.label}</p>
@@ -48,7 +48,7 @@ export const StatisticsSection: React.FC<StatisticsSectionProps> = ({ profile })
                 ))}
             </div>
 
-            <div className="bg-card-bg/50 border border-outline rounded-lg p-6 mb-8">
+            <div className="bg-card/50 border border-outline rounded-lg p-6 mb-8">
                 <div className="flex justify-between items-center mb-4">
                     <h4 className="font-semibold text-white">Cumulative Net Profit</h4>
                     <button className="text-xs font-semibold text-accent-green hover:underline">Reset Net Profit</button>
@@ -70,7 +70,7 @@ export const StatisticsSection: React.FC<StatisticsSectionProps> = ({ profile })
 
             <div>
                 <h4 className="font-semibold text-white mb-4">Last 24 Hours Stats</h4>
-                <div className="bg-card-bg/50 border border-outline rounded-lg">
+                <div className="bg-card/50 border border-outline rounded-lg">
                     <div className="grid grid-cols-3 text-left text-xs text-text-muted uppercase px-4 py-2 border-b border-outline">
                         <th>Game</th>
                         <th className="text-right">Longest Bet</th>

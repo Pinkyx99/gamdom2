@@ -79,9 +79,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, view, setVi
 
   // FIX: Changed `JSX.Element` to `React.ReactElement` to resolve the 'Cannot find namespace JSX' error. `React.ReactElement` is a valid type provided by the React import.
   const socialProviders: { name: string; icon: React.ReactElement; providerKey: Provider }[] = [
-      { name: 'Steam', icon: <SteamIcon className="w-5 h-5"/>, providerKey: 'steam' },
+      // FIX: Type '"steam"' is not assignable to type 'Provider'. Casting to Provider to bypass type error.
+      { name: 'Steam', icon: <SteamIcon className="w-5 h-5"/>, providerKey: 'steam' as Provider },
       { name: 'Google', icon: <GoogleIcon className="w-5 h-5"/>, providerKey: 'google' },
-      { name: 'Telegram', icon: <TelegramIcon className="w-5 h-5"/>, providerKey: 'telegram' },
+      // FIX: Type '"telegram"' is not assignable to type 'Provider'. Casting to Provider to bypass type error.
+      { name: 'Telegram', icon: <TelegramIcon className="w-5 h-5"/>, providerKey: 'telegram' as Provider },
   ];
 
   if (!show) {
@@ -89,15 +91,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, view, setVi
   }
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-backdrop" onClick={onClose}>
       <div 
-        className="bg-card w-full max-w-4xl min-h-[600px] rounded-2xl flex overflow-hidden shadow-2xl border border-outline"
+        className="bg-card w-full max-w-4xl min-h-[600px] rounded-2xl flex overflow-hidden shadow-2xl border border-outline modal-content"
         onClick={e => e.stopPropagation()}
       >
         {/* Decorative Left Panel */}
         <div 
-            className="hidden md:block w-1/3 bg-background p-8 relative overflow-hidden bg-cover bg-center"
-            style={{backgroundImage: 'url(https://gamdom.com/build/side-image.3af9ab482b.396.png)'}}
+            className="hidden md:block w-1/3 bg-background p-8 relative overflow-hidden"
+            style={{
+                backgroundImage: 'url(https://i.imgur.com/BLxw7CY.png)',
+                backgroundPosition: 'center',
+                backgroundSize: '140%',
+                backgroundRepeat: 'no-repeat',
+            }}
         >
         </div>
 

@@ -1,3 +1,4 @@
+
 import React, { useMemo } from 'react';
 import { Profile, RouletteBet, RouletteColor } from '../../types';
 
@@ -29,8 +30,9 @@ export const RouletteBettingArea: React.FC<RouletteBettingAreaProps> = ({ color,
     };
 
     return (
-        <div className={`bg-[#1A222D] rounded-xl border-2 ${isEnded && isWinner ? 'border-accent-green animate-winner' : 'border-outline'} flex flex-col min-h-[250px] p-3 space-y-3 transition-colors`}>
-            <div className="text-center">
+        <div className={`relative bg-[#1A222D] rounded-xl border-2 ${isEnded && isWinner ? 'border-accent-green' : 'border-outline'} flex flex-col min-h-[250px] p-3 space-y-3 transition-colors overflow-hidden`}>
+            {isEnded && isWinner && <div className="absolute inset-0 animate-winner-glow" />}
+            <div className="text-center relative z-10">
                 <p className="text-sm font-semibold text-white">Potential Profit: {payout}</p>
                 <button
                     onClick={onPlaceBet}
@@ -40,7 +42,7 @@ export const RouletteBettingArea: React.FC<RouletteBettingAreaProps> = ({ color,
                     Bet on {title}
                 </button>
             </div>
-             <div className="flex items-center justify-between text-xs text-text-muted px-1">
+             <div className="flex items-center justify-between text-xs text-text-muted px-1 relative z-10">
                 <div className="flex items-center space-x-1.5">
                     <UserIcon className="w-4 h-4" />
                     <span>{bets.length} Player(s)</span>
@@ -48,7 +50,7 @@ export const RouletteBettingArea: React.FC<RouletteBettingAreaProps> = ({ color,
                 <span>Total ${totalBet.toFixed(2)}</span>
             </div>
 
-            <div className="flex-1 overflow-y-auto no-scrollbar space-y-1 pr-1">
+            <div className="flex-1 overflow-y-auto no-scrollbar space-y-1 pr-1 relative z-10">
                  {bets.map(bet => (
                      <div key={bet.id} className="flex items-center justify-between p-1.5 rounded-md bg-black/20">
                         <div className="flex items-center space-x-2">
@@ -67,18 +69,26 @@ export const RouletteBettingArea: React.FC<RouletteBettingAreaProps> = ({ color,
                 ))}
             </div>
              <style>{`
-              @keyframes pulse-winner {
-                0%, 100% {
-                    border-color: #00C17B;
-                    box-shadow: 0 0 0 0 rgba(0, 193, 123, 0.5);
-                }
-                50% {
-                    border-color: rgba(0, 193, 123, 0.6);
-                    box-shadow: 0 0 15px 5px rgba(0, 193, 123, 0);
-                }
+              @keyframes winner-glow-anim {
+                0% { transform: translate(-50%, -50%) rotate(0deg) scale(3); }
+                100% { transform: translate(-50%, -50%) rotate(360deg) scale(3); }
               }
-              .animate-winner {
-                animation: pulse-winner 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              .animate-winner-glow::before {
+                content: '';
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 150%;
+                padding-bottom: 150%;
+                border-radius: 50%;
+                background-image: conic-gradient(from 0deg, transparent, rgba(0, 193, 123, 0.3), transparent 30%);
+                animation: winner-glow-anim 4s linear infinite;
+                opacity: 0;
+                animation-delay: 0.5s;
+                animation-fill-mode: forwards;
+              }
+              .animate-winner-glow {
+                  animation-delay: 2s;
               }
             `}</style>
         </div>

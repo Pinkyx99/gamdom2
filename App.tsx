@@ -150,7 +150,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className={`h-screen font-sans text-text-main ${getAppBgClass()}`}>
+    <div className={`h-screen font-sans text-text-main transition-colors duration-300 ${getAppBgClass()}`}>
       <AuthModal 
         show={showAuthModal} 
         onClose={() => setShowAuthModal(false)}

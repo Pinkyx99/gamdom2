@@ -9,8 +9,14 @@ export const GameGrid: React.FC = () => {
                 <h2 className="text-2xl font-bold text-white">Popular Games</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {GAMES.map(game => (
-                    <GameCard key={game.id} game={game} />
+                {GAMES.map((game, index) => (
+                    <div 
+                        key={game.id} 
+                        className="game-grid-item" 
+                        style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                        <GameCard game={game} />
+                    </div>
                 ))}
             </div>
         </div>

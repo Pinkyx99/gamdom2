@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useMemo } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { Profile, RouletteColor, RouletteBet, RouletteHistoryItem } from '../types';
@@ -17,7 +18,7 @@ interface RouletteGamePageProps {
 
 const HistoryBar: React.FC<{ history: RouletteHistoryItem[] }> = ({ history }) => (
     <div className="flex items-center space-x-1.5 overflow-hidden">
-        {history.slice(0, 8).map((item, index) => (
+        {history.slice(0, 12).map((item, index) => (
             <div key={index} className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold text-white ${getNumberColorClass(item.winning_number)} border-2 border-background`}>
                 {item.winning_number}
             </div>
@@ -56,7 +57,7 @@ const RouletteGamePage: React.FC<RouletteGamePageProps> = ({ onNavigate, profile
     const previousWinningNumber = history[0]?.winning_number ?? ROULETTE_ORDER[0];
 
     return (
-        <div className="flex flex-col flex-1 w-full max-w-[1400px] mx-auto px-4 py-6">
+        <div className="flex flex-col flex-1 w-full max-w-[1600px] mx-auto px-4 py-6">
             <RouletteSpinner
                 gameState={gameState}
                 winningNumber={winningNumber}
