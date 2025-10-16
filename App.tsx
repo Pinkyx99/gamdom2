@@ -75,7 +75,7 @@ const App: React.FC = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: window.location.href,
+        redirectTo: window.location.origin,
         queryParams: {
           prompt: 'select_account',
         },
