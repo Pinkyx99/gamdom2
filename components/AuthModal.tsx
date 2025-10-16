@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { LogoIcon, SteamIcon, GoogleIcon, TelegramIcon } from './icons';
@@ -66,8 +64,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, view, setVi
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        // The redirectTo URL should be configured in your Supabase project's auth settings.
-        // It defaults to the current page URL.
+        redirectTo: window.location.href,
         queryParams: {
           prompt: 'select_account',
         },
