@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { KenoRandomIcon, KenoClearIcon } from './KenoIcons';
-import { LogoIcon } from '../icons';
+import { Logo } from '../icons';
 
 type RiskLevel = 'low' | 'medium' | 'high' | 'classic';
 
@@ -128,9 +127,8 @@ export const KenoControls: React.FC<KenoControlsProps> = ({
                 <div className="text-center text-gray-400 py-16">Auto-bet controls coming soon!</div>
             )}
 
-            <div className="mt-4 flex items-center justify-center space-x-2">
-                 <LogoIcon className="h-6 w-6 text-white" />
-                 <span className="font-sans font-extrabold text-xl text-white tracking-tighter">Gamboom</span>
+            <div className="mt-4 flex items-center justify-center">
+                 <Logo className="h-8" />
             </div>
         </div>
     );

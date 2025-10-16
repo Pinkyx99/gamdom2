@@ -44,8 +44,9 @@ export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick,
           {/* Left Side: Logo or Search */}
           <div className="flex items-center">
             {currentView !== 'home' ? (
-                <button onClick={() => onNavigate('home')} aria-label="Go to homepage">
-                <Logo />
+                <button onClick={() => onNavigate('home')} aria-label="Go to homepage" className="flex items-center space-x-3">
+                  <Logo className="h-14" />
+                  <span className="text-2xl font-bold text-white">Mihael.bet</span>
                 </button>
             ) : (
                 <div className="relative w-full max-w-sm">

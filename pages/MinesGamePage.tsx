@@ -4,7 +4,7 @@ import { Session } from '@supabase/supabase-js';
 import { MinesControls } from '../components/mines/MinesControls';
 import { MinesGrid } from '../components/mines/MinesGrid';
 import { supabase } from '../lib/supabaseClient';
-import { MinesLogoIcon, GamdomLogoIcon, SoundIcon, LightningIcon, CalendarIcon, ClockIcon, CheckIcon, QuestionIcon } from '../components/icons';
+import { Logo, SoundIcon, LightningIcon, CalendarIcon, ClockIcon, CheckIcon, QuestionIcon } from '../components/icons';
 
 // --- Provably Fair Helper Functions ---
 async function sha256Hex(str: string): Promise<string> {
@@ -162,12 +162,11 @@ const MinesGamePage: React.FC<MinesGamePageProps> = ({ profile, session, onProfi
     }, [gameState, revealedTiles.size, profit, showFinalGrid, onProfileUpdate]);
     
     return (
-        <div className="flex-1 flex items-center justify-center p-4 bg-[#06080f] overflow-hidden">
-            <div className="w-full max-w-[1200px] aspect-[1200/715] bg-cover bg-center rounded-lg shadow-2xl relative" style={{backgroundImage: "url('https://i.imgur.com/vHq4gXF.png')"}}>
-                <div className="absolute inset-0 bg-black/40"></div>
+        <div className="flex-1 flex items-center justify-center p-4 overflow-hidden">
+            <div className="w-full max-w-[1200px] aspect-[1200/715] bg-card border border-outline rounded-lg shadow-2xl relative">
                 
                 <header className="absolute top-5 left-8 right-8 flex justify-between items-start z-10">
-                    <MinesLogoIcon />
+                    <Logo />
                     <TopToolbar />
                 </header>
                 
@@ -196,7 +195,7 @@ const MinesGamePage: React.FC<MinesGamePageProps> = ({ profile, session, onProfi
                 </main>
                 
                 <footer className="absolute bottom-5 left-8 z-10">
-                    <GamdomLogoIcon />
+                    <Logo className="h-8 opacity-70" />
                 </footer>
             </div>
         </div>

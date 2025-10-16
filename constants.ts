@@ -109,11 +109,11 @@ export const ORIGINAL_GAMES: ({ name: string; image: string; rtp: number; blobCo
 
 export const GAMES: Game[] = [
   { id: '1', name: 'Gates of Olympus', provider: 'Pragmatic Play', image: 'https://i.imgur.com/wiCzOFG.png', tags: ['New', 'Popular'] },
-  { id: '2', name: 'Sweet Bonanza', provider: 'Pragmatic Play', image: 'https://i.imgur.com/OqVfUkw.png' },
-  { id: '3', name: 'The Dog House', provider: 'Pragmatic Play', image: 'https://i.imgur.com/G5Sy5yL.png' },
-  { id: '4', name: 'Wanted Dead or a Wild', provider: 'Hacksaw Gaming', image: 'https://i.imgur.com/zX0q2aU.jpeg' },
-  { id: '5', name: 'Book of Dead', provider: 'Play\'n GO', image: 'https://i.imgur.com/kYqU9Qc.jpeg' },
-  { id: '6', name: 'Razor Shark', provider: 'Push Gaming', image: 'https://i.imgur.com/uQfWDbw.jpeg' },
-  { id: '7', name: 'Money Train 2', provider: 'Relax Gaming', image: 'https://i.imgur.com/L4pP31z.png' },
-  { id: '8', name: 'Jammin\' Jars 2', provider: 'Push Gaming', image: 'https://i.imgur.com/fO2Iq3a.jpeg' },
+  { id: '2', name: 'Sweet Bonanza', provider: 'Pragmatic Play', image: 'https://i.imgur.com/Jdb27cI.png' },
+  { id: '3', name: 'The Dog House', provider: 'Pragmatic Play', image: 'https://i.imgur.com/gp7nQcL.png' },
+  { id: '4', name: 'Wanted Dead or a Wild', provider: 'Hacksaw Gaming', image: 'https://i.imgur.com/ElXz5TY.jpeg' },
+  { id: '5', name: 'Book of Dead', provider: 'Play\'n GO', image: 'https://i.imgur.com/AnTDMDH.jpeg' },
+  { id: '6', name: 'Razor Shark', provider: 'Push Gaming', image: 'https://i.imgur.com/WPRnFHW.jpeg' },
+  { id: '7', name: 'Money Train 2', provider: 'Relax Gaming', image: 'https://i.imgur.com/IFzcwSg.png' },
+  { id: '8', name: 'Jammin\' Jars 2', provider: 'Push Gaming', image: 'https://i.imgur.com/FEfkOK3.jpeg' },
 ];

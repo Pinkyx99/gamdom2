@@ -1,5 +1,4 @@
 import React from 'react';
-import { FortressIcon, GemIcon, MineIcon } from '../icons';
 
 interface MinesGridProps {
     gridState: ('hidden' | 'gem' | 'mine')[];
@@ -21,25 +20,20 @@ const Tile: React.FC<{
     let baseClasses = 'w-24 h-24 rounded-lg relative transition-all duration-300 ease-in-out transform';
     let buttonDisabled = !isPlaying || isRevealed;
 
-    switch(state) {
-        case 'gem':
-            baseClasses += ' bg-[#2f4553] scale-105';
-            content = <div className="animate-reveal"><GemIcon className="w-12 h-12 text-cyan-300" /></div>;
-            break;
-        case 'mine':
-            baseClasses += ' bg-red-800/60 scale-105';
-            content = <div className="animate-reveal"><MineIcon className="w-12 h-12 text-red-400" /></div>;
-            break;
-        case 'hidden':
-        default:
-            baseClasses += ' bg-gradient-to-br from-[#404c58] to-[#242c34] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-2px_4px_rgba(0,0,0,0.2)]';
-            content = <FortressIcon className="w-12 h-12 text-[#242c34]" />;
-            if (isFinished) {
-                baseClasses += ' opacity-50'; // Unrevealed tiles are faded on game end
-            } else if (isPlaying) {
-                baseClasses += ' cursor-pointer hover:brightness-110 hover:-translate-y-1';
-            }
-            break;
+    if (state === 'gem') {
+        baseClasses += ' bg-[#2f4553] scale-105';
+        content = <img src="https://i.imgur.com/aUjzAIT.png" alt="Gem" className="w-16 h-16 object-contain animate-reveal" />;
+    } else if (state === 'mine') {
+        baseClasses += ' bg-red-800/60 scale-105';
+        content = <img src="https://i.imgur.com/u9aNSVd.png" alt="Mine" className="w-16 h-16 object-contain animate-reveal" />;
+    } else { // 'hidden' state
+        content = <img src="https://i.imgur.com/Ny2KcZC.png" alt="Hidden Tile" className="w-full h-full object-cover rounded-lg" />;
+        
+        if (isFinished) {
+            baseClasses += ' opacity-50';
+        } else if (isPlaying) {
+            baseClasses += ' cursor-pointer hover:brightness-110 hover:-translate-y-1';
+        }
     }
 
     return (

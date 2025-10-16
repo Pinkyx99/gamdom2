@@ -5,8 +5,9 @@ import { Session } from '@supabase/supabase-js';
 import { KenoControls } from '../components/keno/KenoControls';
 import { KenoGrid } from '../components/keno/KenoGrid';
 import { KenoPayoutBar } from '../components/keno/KenoPayoutBar';
-import { KenoLogoIcon, KenoSoundIcon, KenoSpeedIcon, KenoHistoryIcon, KenoHelpIcon, KenoFairnessIcon, KenoInfoIcon } from '../components/keno/KenoIcons';
+import { KenoSoundIcon, KenoSpeedIcon, KenoHistoryIcon, KenoHelpIcon, KenoFairnessIcon, KenoInfoIcon } from '../components/keno/KenoIcons';
 import { supabase } from '../lib/supabaseClient';
+import { Logo } from '../components/icons';
 
 interface KenoGamePageProps {
     profile: Profile | null;
@@ -164,7 +165,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
     return (
         <div className="flex-1 flex flex-col bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('https://gamdom.com/_proxied/games/keno/background-large.08b7ce281cc14ac9c24a.webp')" }}>
             <div className="w-full max-w-[1200px] mx-auto px-4 py-4 flex justify-between items-center">
-                <KenoLogoIcon />
+                <Logo />
                 <div className="flex items-center space-x-1">
                     <button className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"><KenoSoundIcon /></button>
                     <button className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"><KenoSpeedIcon /></button>

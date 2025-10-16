@@ -1,11 +1,8 @@
 import React from 'react';
 
-// Re-styling LogoIcon to be text-based as "Mihael.bet"
-export const Logo: React.FC<{ className?: string }> = ({ className }) => (
-    <div className={`flex items-center font-black text-2xl tracking-tight ${className}`}>
-        <span className="text-white">Mihael</span>
-        <span className="text-primary">.bet</span>
-    </div>
+// Updated Logo to use the new image
+export const Logo: React.FC<{ className?: string }> = ({ className = "h-12" }) => (
+    <img src="https://i.imgur.com/6U31UIH.png" alt="Mihael.bet Logo" className={className} />
 );
 
 // New Icons for Sidebar
@@ -118,10 +115,8 @@ export const UsersIcon: React.FC<{ className?: string }> = (props) => (<svg {...
 export const ShieldCheckIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 20.944a11.955 11.955 0 019-2.611m8.618-3.04A12.02 12.02 0 0121 20.944a11.955 11.955 0 01-9-17.611z" /></svg>);
 export const ArrowRightOnRectangleIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>);
 
-export const LogoIcon: React.FC<{ className?: string }> = ({ className }) => (
-    <svg className={className} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path fillRule="evenodd" clipRule="evenodd" d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21ZM16.0353 9.5C16.0353 8.39543 15.1399 7.5 14.0353 7.5H11.0353V16.5H14.0353C15.1399 16.5 16.0353 15.6046 16.0353 14.5V13.8333C16.0353 13.3728 15.6625 13 15.202 13H12.698V11H15.202C15.6625 11 16.0353 10.6272 16.0353 10.1667V9.5Z" fill="currentColor"/>
-    </svg>
+export const LogoIcon: React.FC<{ className?: string }> = ({ className = "h-12" }) => (
+    <img src="https://i.imgur.com/6U31UIH.png" alt="Mihael.bet Logo" className={className} />
 );
 
 export const ChatBubbleIcon: React.FC<{ className?: string }> = (props) => (
@@ -129,22 +124,6 @@ export const ChatBubbleIcon: React.FC<{ className?: string }> = (props) => (
 );
 
 // --- START OF MINES GAME ICONS ---
-export const MinesLogoIcon: React.FC = () => (
-    <div className="relative font-serif font-bold text-5xl text-[#14a363]" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.7)' }}>
-        M<span className="relative">i<span className="absolute -top-3 -right-1 text-2xl">💣</span></span>nes
-    </div>
-);
-export const GamdomLogoIcon: React.FC = () => (
-    <div className="flex items-center space-x-2">
-        <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 0L0 6V18L12 28L24 18V6L12 0Z" fill="#17d182"/>
-            <path d="M12 4L4 8V16L12 24L20 16V8L12 4Z" fill="#0f1519"/>
-            <path d="M12 7L7 10V14L12 21L17 14V10L12 7Z" fill="#17d182"/>
-        </svg>
-        <span className="font-sans font-bold text-white text-lg">Gamdom</span>
-    </div>
-);
-
 export const SoundIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>);
 export const LightningIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>);
 export const CalendarIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>);

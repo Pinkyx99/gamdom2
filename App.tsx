@@ -108,7 +108,7 @@ const App: React.FC = () => {
   const getAppBgClass = () => {
     switch(currentView) {
         case 'crash': return 'bg-[#0F1923]';
-        case 'mines': return 'bg-[#06080f]';
+        case 'mines': return 'bg-background';
         case 'roulette': return 'bg-[#0D1316]';
         case 'dice': return 'bg-[#081018]';
         default: return 'bg-background';
