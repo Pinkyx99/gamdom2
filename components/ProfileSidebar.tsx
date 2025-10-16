@@ -71,7 +71,7 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile, onProfi
 
     return (
         <aside className="w-full lg:w-64 flex-shrink-0">
-            <div className="bg-card-bg p-6 rounded-xl border border-outline">
+            <div className="bg-card p-6 rounded-xl border border-outline">
                 <div className="flex flex-col items-center">
                     <div className="relative group mb-3">
                         <img

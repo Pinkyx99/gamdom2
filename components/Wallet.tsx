@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { WalletDropdown } from './WalletDropdown';
+import { UsdIcon } from './icons';
 
 interface WalletProps {
     onWalletButtonClick: () => void;
@@ -33,18 +34,18 @@ export const Wallet: React.FC<WalletProps> = ({ onWalletButtonClick, balance }) 
                     aria-expanded={isDropdownOpen}
                     className="flex items-center space-x-2 p-2 rounded-md hover:bg-white/10 transition-colors"
                 >
-                    <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">$</div>
+                    <UsdIcon className="w-5 h-5" />
                     <span className="font-semibold text-sm text-white">${(balance || 0).toFixed(2)}</span>
                     <svg className={`w-4 h-4 text-text-muted transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
-                <WalletDropdown show={isDropdownOpen} />
+                <WalletDropdown show={isDropdownOpen} balance={balance} />
             </div>
 
             <button
                 onClick={onWalletButtonClick}
-                className="bg-accent-green text-white font-semibold px-6 py-2 rounded-md text-sm transition-transform duration-200 hover:scale-105 active:scale-100"
+                className="bg-primary text-background font-semibold px-6 py-2 rounded-md text-sm transition-transform duration-200 hover:scale-105 active:scale-100"
             >
                 Wallet
             </button>

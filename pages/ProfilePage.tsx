@@ -22,10 +22,9 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onProfileUpdate, act
         switch(activePage) {
             case 'Profile': return <ProfileSection profile={profile} />;
             case 'Notifications': return <NotificationsSection />;
-            // FIX: Pass the 'profile' prop to StatisticsSection to resolve missing property error.
             case 'Statistics': return <StatisticsSection profile={profile} />;
             case 'Settings': return <SettingsSection />;
-            case 'Transactions': return <TransactionsSection />;
+            case 'Transactions': return <TransactionsSection profile={profile} />;
             // Add cases for other sections like Affiliates, Privacy, etc.
             default: return <ProfileSection profile={profile} />;
         }

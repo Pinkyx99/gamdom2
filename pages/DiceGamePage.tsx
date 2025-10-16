@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Profile } from '../types';
 import { Session } from '@supabase/supabase-js';
@@ -112,8 +113,8 @@ const DiceGamePage: React.FC<{
             const { error: debitError } = await supabase
                 .from('profiles')
                 .update({ 
-                    balance: profile.balance - betAmount,
-                    wagered: (profile.wagered || 0) + betAmount,
+                    balance: (Number(profile.balance) || 0) - betAmount,
+                    wagered: (Number(profile.wagered) || 0) + betAmount,
                 })
                 .eq('id', session.user.id);
             if (debitError) throw new Error(debitError.message);
@@ -139,7 +140,7 @@ const DiceGamePage: React.FC<{
                 if (fetchError) throw new Error(fetchError.message);
                 if (!currentProfile) throw new Error("Could not find user profile to update balance.");
 
-                const newBalance = (parseFloat(String(currentProfile.balance)) || 0) + payout;
+                const newBalance = (Number(currentProfile.balance) || 0) + payout;
                 const { error: payoutError } = await supabase
                     .from('profiles')
                     .update({ balance: newBalance })

@@ -19,24 +19,31 @@ export const SIDEBAR_BOTTOM_NAV_ITEMS: SidebarNavItem[] = [
   { name: 'FAQs', href: '#', icon: FaqIcon },
 ];
 
-// FIX: Added missing constants for WalletDropdown
-// FIX: Replaced JSX with React.createElement to prevent parsing errors in .ts file.
-export const CURRENCIES = [
-    { code: 'USD', balance: '1,250.50', icon: React.createElement(UsdIcon, { className: "w-6 h-6" }) },
-    // Add other currencies like BTC, ETH etc.
+const BtcIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/bitcoin--v1.png", alt: "BTC", className: "w-6 h-6" });
+const EthIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/ethereum.png", alt: "ETH", className: "w-6 h-6" });
+const LtcIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/litecoin.png", alt: "LTC", className: "w-6 h-6" });
+const TrxIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/tron.png", alt: "TRX", className: "w-6 h-6" });
+const XrpIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/xrp.png", alt: "XRP", className: "w-6 h-6" });
+const DogeIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/dogecoin.png", alt: "DOGE", className: "w-6 h-6" });
+const SolIcon = () => React.createElement('img', { src: "https://img.icons8.com/fluency/48/solana.png", alt: "SOL", className: "w-6 h-6" });
+
+export const WALLET_CURRENCIES = [
+    { code: 'USD', balance: '0.00', icon: React.createElement(UsdIcon, { className: "w-6 h-6" }) },
+    { code: 'BTC', balance: '0.00', icon: React.createElement(BtcIcon) },
+    { code: 'ETH', balance: '0.00', icon: React.createElement(EthIcon) },
+    { code: 'LTC', balance: '0.00', icon: React.createElement(LtcIcon) },
+    { code: 'TRX', balance: '0.00', icon: React.createElement(TrxIcon) },
+    { code: 'XRP', balance: '0.00', icon: React.createElement(XrpIcon) },
+    { code: 'DOGE', balance: '0.00', icon: React.createElement(DogeIcon) },
+    { code: 'SOL', balance: '0.00', icon: React.createElement(SolIcon) },
 ];
 
-export const BET_CURRENCIES = [
-    { code: 'USD' },
-    { code: 'EUR' },
-    { code: 'JPY' },
+export const WALLET_BET_CURRENCIES = [
+    'USD', 'EUR', 'RUB', 'JPY', 'CAD', 'KRW', 'TRY', 'NGN', 'NZD', 'PLN', 'CZK', 'INR'
 ];
 
 // FIX: Added missing constants for WalletModal
 // FIX: Replaced JSX with React.createElement to prevent parsing errors in .ts file.
-const BtcIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/bitcoin--v1.png", alt: "BTC", className: "w-8 h-8" });
-const EthIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/ethereum.png", alt: "ETH", className: "w-8 h-8" });
-const LtcIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/litecoin.png", alt: "LTC", className: "w-8 h-8" });
 const VisaIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/visa.png", alt: "Visa", className: "w-8 h-8" });
 const MastercardIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/mastercard.png", alt: "Mastercard", className: "w-8 h-8" });
 export const PAYMENT_CATEGORIES = [

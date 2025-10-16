@@ -23,7 +23,7 @@ export const Hero: React.FC<HeroProps> = ({ onSignUpClick, onGoogleSignInClick }
     ];
 
     return (
-        <div className="relative rounded-2xl p-6 lg:p-8 flex flex-col justify-between min-h-[450px] bg-cover bg-top" style={{backgroundImage: 'url(https://i.imgur.com/wiCzOFG.png)'}}>
+        <div className="relative rounded-2xl p-6 lg:p-8 flex flex-col justify-between min-h-[450px] bg-cover" style={{backgroundImage: 'url(https://i.imgur.com/KRgJFwR.png)', backgroundPosition: 'center 30%'}}>
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent rounded-2xl"></div>
             
             <div className="relative z-10">

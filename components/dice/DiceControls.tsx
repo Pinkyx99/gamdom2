@@ -55,7 +55,7 @@ export const DiceControls: React.FC<DiceControlsProps> = (props) => {
     };
 
     return (
-        <div className="bg-card-bg rounded-lg p-4 flex flex-col space-y-4 border border-outline shadow-soft min-h-[500px] lg:min-h-0">
+        <div className="bg-card rounded-lg p-4 flex flex-col space-y-4 border border-outline shadow-soft min-h-[500px] lg:min-h-0">
             {/* Tabs */}
             <div className="flex bg-[#0D1316] rounded-md p-1">
                 <button className="flex-1 py-2 text-sm font-semibold rounded bg-[#2D3748] text-white">Manual</button>

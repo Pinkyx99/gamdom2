@@ -2,19 +2,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { Session } from '@supabase/supabase-js';
 import { ChatMessage } from '../types';
+import { ChatUserContextMenu } from './ChatUserContextMenu';
 
 interface ChatRailProps {
   session: Session | null;
   onClose?: () => void;
   onTipUser: (recipient: { id: string; username: string }) => void;
+  onViewProfile: (userId: string) => void;
 }
 
-const Message: React.FC<{ msg: ChatMessage, onTipUser: ChatRailProps['onTipUser'] }> = React.memo(({ msg, onTipUser }) => (
+const Message: React.FC<{ msg: ChatMessage, onUserClick: (event: React.MouseEvent, user: { id: string, username: string }) => void }> = React.memo(({ msg, onUserClick }) => (
     <div className="flex items-start space-x-3 p-3 hover:bg-white/5 rounded-md">
-        <img src={msg.profiles.avatar_url || 'https://i.imgur.com/L4pP31z.png'} alt={msg.profiles.username} className="w-8 h-8 rounded-full mt-0.5" />
+        <button onClick={(e) => onUserClick(e, { id: msg.user_id, username: msg.profiles.username })} className="flex-shrink-0">
+            <img src={msg.profiles.avatar_url || 'https://i.imgur.com/L4pP31z.png'} alt={msg.profiles.username} className="w-8 h-8 rounded-full mt-0.5" />
+        </button>
         <div className="flex-1">
             <button
-              onClick={() => onTipUser({ id: msg.user_id, username: msg.profiles.username })}
+              onClick={(e) => onUserClick(e, { id: msg.user_id, username: msg.profiles.username })}
               className="font-bold text-sm text-primary-light hover:underline text-left"
             >
               {msg.profiles.username}
@@ -24,13 +28,13 @@ const Message: React.FC<{ msg: ChatMessage, onTipUser: ChatRailProps['onTipUser'
     </div>
 ));
 
-export const ChatRail: React.FC<ChatRailProps> = ({ session, onClose, onTipUser }) => {
+export const ChatRail: React.FC<ChatRailProps> = ({ session, onClose, onTipUser, onViewProfile }) => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    // Give each component instance a unique channel name to avoid conflicts, especially in React's Strict Mode.
     const [channelName] = useState(() => `realtime-chat-${crypto.randomUUID()}`);
+    const [contextMenu, setContextMenu] = useState<{ user: { id: string; username: string }, position: { x: number, y: number } } | null>(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -94,7 +98,7 @@ export const ChatRail: React.FC<ChatRailProps> = ({ session, onClose, onTipUser 
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [channelName]); // Dependency array ensures effect runs only when channelName changes (which is never after init)
+    }, [channelName]);
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -117,8 +121,32 @@ export const ChatRail: React.FC<ChatRailProps> = ({ session, onClose, onTipUser 
         }
     };
     
+    const handleUserClick = (event: React.MouseEvent, user: { id: string; username: string }) => {
+        event.preventDefault();
+        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+        // Position menu relative to viewport
+        setContextMenu({
+            user,
+            position: { x: rect.left - 150, y: rect.top } 
+        });
+    };
+
+    const handleIgnore = (userId: string) => {
+        console.log(`Ignoring user ${userId}`); // Placeholder for ignore functionality
+    };
+
     return (
         <div className="bg-sidebar h-full flex flex-col border-l border-border-color">
+            {contextMenu && (
+                <ChatUserContextMenu
+                    user={contextMenu.user}
+                    position={contextMenu.position}
+                    onClose={() => setContextMenu(null)}
+                    onProfile={onViewProfile}
+                    onTip={onTipUser}
+                    onIgnore={handleIgnore}
+                />
+            )}
             <header className="flex-shrink-0 flex items-center justify-between p-4 border-b border-border-color">
                 <div>
                     <h2 className="font-bold text-white">Chat</h2>
@@ -136,7 +164,7 @@ export const ChatRail: React.FC<ChatRailProps> = ({ session, onClose, onTipUser 
             
             <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar p-2">
                 {messages.map(msg => (
-                    <Message key={msg.id} msg={msg} onTipUser={onTipUser} />
+                    <Message key={msg.id} msg={msg} onUserClick={handleUserClick} />
                 ))}
                 <div ref={messagesEndRef} />
             </div>

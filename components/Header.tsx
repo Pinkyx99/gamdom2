@@ -38,31 +38,45 @@ export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick,
   const hasUnclaimedBonus = profile && !profile.has_claimed_welcome_bonus;
 
   return (
-    <header className="flex-shrink-0">
+    <header className="flex-shrink-0 relative z-30">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="relative flex items-center justify-between h-20">
           {/* Left Side: Logo or Search */}
-          {currentView !== 'home' ? (
-            <button onClick={() => onNavigate('home')} aria-label="Go to homepage">
-              <Logo />
-            </button>
-          ) : (
-             <div className="relative w-full max-w-sm">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <SearchIcon className="w-5 h-5 text-text-muted" />
-              </div>
-              <input
-                type="search"
-                placeholder="Search games"
-                className="w-full bg-sidebar/80 border border-border-color rounded-lg py-2.5 pl-10 pr-4 text-sm placeholder-text-muted focus:ring-2 focus:ring-primary focus:outline-none transition"
-              />
-            </div>
-          )}
+          <div className="flex items-center">
+            {currentView !== 'home' ? (
+                <button onClick={() => onNavigate('home')} aria-label="Go to homepage">
+                <Logo />
+                </button>
+            ) : (
+                <div className="relative w-full max-w-sm">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <SearchIcon className="w-5 h-5 text-text-muted" />
+                </div>
+                <input
+                    type="search"
+                    placeholder="Search games"
+                    className="w-full bg-sidebar/80 border border-border-color rounded-lg py-2.5 pl-10 pr-4 text-sm placeholder-text-muted focus:ring-2 focus:ring-primary focus:outline-none transition"
+                />
+                </div>
+            )}
+          </div>
+
+          {/* Center: Wallet on Desktop */}
+          <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            {session && profile && (
+              <Wallet onWalletButtonClick={onWalletButtonClick} balance={profile.balance} />
+            )}
+          </div>
 
           {/* Right Side: Auth/Profile & Mobile Chat Toggle */}
           <div className="flex items-center space-x-2">
             {session && profile ? (
               <>
+                {/* Wallet for Mobile/Tablet */}
+                <div className="lg:hidden">
+                    <Wallet onWalletButtonClick={onWalletButtonClick} balance={profile.balance} />
+                </div>
+
                 <div ref={notificationsRef} className="relative">
                     <button onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} className="p-2 rounded-full hover:bg-white/10 transition-colors text-text-muted hover:text-white relative">
                         <BellIcon className="w-6 h-6" />
@@ -77,8 +91,7 @@ export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick,
                         onProfileUpdate={onProfileUpdate}
                     />
                 </div>
-
-                <Wallet onWalletButtonClick={onWalletButtonClick} balance={profile.balance} />
+                
                 <ProfileDropdown 
                     profile={profile} 
                     onNavigate={onNavigate} 

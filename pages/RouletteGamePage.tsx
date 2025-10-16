@@ -22,7 +22,7 @@ const HistoryBar: React.FC<{ history: RouletteHistoryItem[] }> = ({ history }) =
                 {item.winning_number}
             </div>
         ))}
-        <button className="h-8 w-8 rounded-full bg-card-bg/50 flex-shrink-0 flex items-center justify-center text-text-muted hover:bg-white/10" aria-label="View history">
+        <button className="h-8 w-8 rounded-full bg-card/50 flex-shrink-0 flex items-center justify-center text-text-muted hover:bg-white/10" aria-label="View history">
            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h5M20 20v-5h-5M4 4l1.5 1.5A9 9 0 0119.5 19.5" /></svg>
         </button>
     </div>

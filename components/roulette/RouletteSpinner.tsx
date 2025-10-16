@@ -151,7 +151,7 @@ export const RouletteSpinner: React.FC<RouletteSpinnerProps> = ({ gameState, win
     }, [gameState, winningNumber, previousWinningNumber, reel, viewportWidth, getTranslateForIndex]);
     
     return (
-        <div className="bg-card-bg pt-4 rounded-xl border border-outline relative overflow-hidden shadow-lg">
+        <div className="bg-card pt-4 rounded-xl border border-outline relative overflow-hidden shadow-lg">
             {/* Decorative Green Circles */}
             <div className="absolute top-1/2 -translate-y-1/2 left-8 w-12 h-12 rounded-full border-2 border-accent-green opacity-40 shadow-[0_0_25px_theme(colors.accent-green)] z-0 pointer-events-none" />
             <div className="absolute top-1/2 -translate-y-1/2 left-20 w-16 h-16 rounded-full border-2 border-accent-green opacity-20 shadow-[0_0_25px_theme(colors.accent-green)] z-0 pointer-events-none" />
@@ -185,8 +185,8 @@ export const RouletteSpinner: React.FC<RouletteSpinnerProps> = ({ gameState, win
                     </div>
                 </div>
                 
-                <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-card-bg via-card-bg/80 to-transparent pointer-events-none z-10" />
-                <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-card-bg via-card-bg/80 to-transparent pointer-events-none z-10" />
+                <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-card via-card/80 to-transparent pointer-events-none z-10" />
+                <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-card via-card/80 to-transparent pointer-events-none z-10" />
             </div>
             
             <style>{`

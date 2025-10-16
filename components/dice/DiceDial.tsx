@@ -130,8 +130,8 @@ export const DiceDial: React.FC<DiceSliderProps> = ({ rollValue, isRollOver, gam
                             }
                         ></div>
                          {/* Slider endpoints */}
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 border-2 border-red-500 bg-card-bg rounded-sm"></div>
-                        <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-4 border-2 border-accent-green bg-card-bg rounded-sm"></div>
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 border-2 border-red-500 bg-card rounded-sm"></div>
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-4 border-2 border-accent-green bg-card rounded-sm"></div>
                     </div>
 
                     <div className="absolute top-1/2 -translate-y-1/2 pointer-events-none" style={{ left: `${sliderPercentage}%`, zIndex: 10 }}>

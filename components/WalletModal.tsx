@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { PAYMENT_CATEGORIES } from '../constants';
 import { LogoIcon } from './icons';
@@ -20,7 +21,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({ show, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div 
-        className="bg-card-bg w-full max-w-4xl h-auto max-h-[90vh] rounded-2xl flex overflow-hidden shadow-2xl border border-outline"
+        className="bg-card w-full max-w-4xl h-auto max-h-[90vh] rounded-2xl flex overflow-hidden shadow-2xl border border-outline"
         onClick={e => e.stopPropagation()}
       >
         {/* Decorative Left Panel */}

@@ -16,7 +16,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onNav
             <button className="flex items-center space-x-2" aria-label={`User profile for ${profile?.username}`} onClick={() => onNavigate('Profile')}>
                 <img src={profile?.avatar_url || 'https://picsum.photos/seed/avatar-main/40/40'} alt="User Avatar" className="w-8 h-8 rounded-full" />
             </button>
-            <div className="absolute top-full right-0 mt-2 w-72 bg-card-bg border border-outline rounded-lg shadow-2xl z-40 p-4 transition-all duration-200 origin-top-right scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 invisible group-hover:visible">
+            <div className="absolute top-full right-0 mt-2 w-72 bg-card border border-outline rounded-lg shadow-2xl z-40 p-4 transition-all duration-200 origin-top-right scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 invisible group-hover:visible">
                 <div className="flex items-center space-x-4 mb-4">
                     <img src={profile?.avatar_url || 'https://picsum.photos/seed/avatar-main/40/40'} alt="User Avatar" className="w-12 h-12 rounded-full" />
                     <div>

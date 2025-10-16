@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Profile, MinesRoundResult } from '../types';
+import { Profile } from '../types';
 // FIX: Import `Session` type from '@supabase/supabase-js' instead of '../types' to resolve module export error.
 import { Session } from '@supabase/supabase-js';
 import { KenoControls } from '../components/keno/KenoControls';
@@ -91,8 +91,9 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
             const { error: debitError } = await supabase
                 .from('profiles')
                 .update({
-                    balance: profile.balance - betAmount,
-                    wagered: (profile.wagered || 0) + betAmount,
+                    // FIX: Cast profile properties to 'any' to avoid potential 'unknown' type errors with strict TypeScript settings.
+                    balance: (Number(profile.balance as any) || 0) - betAmount,
+                    wagered: (Number(profile.wagered as any) || 0) + betAmount,
                 })
                 .eq('id', session.user.id);
             if (debitError) throw debitError;
@@ -123,8 +124,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                     throw new Error("Could not find user profile to update balance.");
                 }
 
-                // FIX: Safely cast `currentProfile.balance` from `unknown` to `number` before performing arithmetic.
-                const newBalance = (Number(currentProfile.balance) || 0) + payout;
+                const newBalance = (Number((currentProfile as any).balance) || 0) + payout;
                 
                 const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);
                 if (payoutError) throw payoutError;

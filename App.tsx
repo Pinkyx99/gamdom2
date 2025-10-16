@@ -15,6 +15,7 @@ import RouletteGamePage from './pages/RouletteGamePage';
 import DiceGamePage from './pages/DiceGamePage';
 import { ChatRail } from './components/ChatRail';
 import { TipUserModal } from './components/TipUserModal';
+import { UserProfileModal } from './components/UserProfileModal';
 
 type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | ProfileLink['name'];
 
@@ -27,6 +28,7 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [tipRecipient, setTipRecipient] = useState<{ id: string; username: string } | null>(null);
+  const [viewingProfileId, setViewingProfileId] = useState<string | null>(null);
 
   const getProfile = useCallback(async (session: Session) => {
     try {
@@ -48,7 +50,7 @@ const App: React.FC = () => {
             id: user.id,
             // Extract username and avatar from OAuth provider's metadata
             username: user.user_metadata.full_name || user.user_metadata.name || user.email.split('@')[0],
-            avatar_url: user.user_metadata.avatar_url,
+            avatar_url: user.user_metadata.avatar_url || `https://api.dicebear.com/8.x/initials/svg?seed=${encodeURIComponent(user.email || user.id)}`,
             // Set initial values for other fields
             balance: 0,
             wagered: 0,
@@ -190,6 +192,11 @@ const App: React.FC = () => {
         recipient={tipRecipient}
         onTipped={handleProfileUpdate}
       />
+       <UserProfileModal
+        userId={viewingProfileId}
+        onClose={() => setViewingProfileId(null)}
+        onTipUser={setTipRecipient}
+      />
 
       <div className="flex h-screen">
           <div className="flex-1 min-w-0 flex flex-col">
@@ -212,7 +219,7 @@ const App: React.FC = () => {
           {/* Desktop Chat Rail */}
           <div className="hidden xl:block w-[320px] flex-shrink-0">
             <div className="sticky top-0 h-screen">
-                <ChatRail session={session} onTipUser={setTipRecipient} />
+                <ChatRail session={session} onTipUser={setTipRecipient} onViewProfile={setViewingProfileId} />
             </div>
           </div>
 
@@ -220,7 +227,7 @@ const App: React.FC = () => {
           <div className={`fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out xl:hidden ${ isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
               <div className="absolute inset-0 bg-black/50" onClick={() => setIsChatOpen(false)}></div>
               <div className="relative w-[320px] h-full float-right">
-                <ChatRail session={session} onClose={() => setIsChatOpen(false)} onTipUser={setTipRecipient} />
+                <ChatRail session={session} onClose={() => setIsChatOpen(false)} onTipUser={setTipRecipient} onViewProfile={setViewingProfileId} />
               </div>
           </div>
       </div>

@@ -91,7 +91,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, view, setVi
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div 
-        className="bg-card-bg w-full max-w-4xl min-h-[600px] rounded-2xl flex overflow-hidden shadow-2xl border border-outline"
+        className="bg-card w-full max-w-4xl min-h-[600px] rounded-2xl flex overflow-hidden shadow-2xl border border-outline"
         onClick={e => e.stopPropagation()}
       >
         {/* Decorative Left Panel */}
