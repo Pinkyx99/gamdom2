@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SearchIcon, Logo, ChatBubbleIcon, BellIcon } from './icons';
+import { SearchIcon, Logo, ChatBubbleIcon, BellIcon, Bars3Icon } from './icons';
 import { Session } from '@supabase/supabase-js';
 import { Profile, ProfileLink } from '../types';
 import { supabase } from '../lib/supabaseClient';
@@ -41,15 +41,9 @@ export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick,
     <header className="flex-shrink-0 relative z-30">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-20">
-          {/* Left Side: Logo or Search */}
-          <div className="flex items-center">
-            {currentView !== 'home' ? (
-                <button onClick={() => onNavigate('home')} aria-label="Go to homepage" className="flex items-center space-x-3">
-                  <Logo className="h-14" />
-                  <span className="text-2xl font-bold text-white">Mihael.bet</span>
-                </button>
-            ) : (
-                <div className="relative w-full max-w-sm">
+          {/* Left Side: Search */}
+          <div className="flex items-center space-x-2">
+            <div className="relative w-full max-w-sm hidden sm:block">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <SearchIcon className="w-5 h-5 text-text-muted" />
                 </div>
@@ -58,8 +52,7 @@ export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick,
                     placeholder="Search games"
                     className="w-full bg-sidebar/80 border border-border-color rounded-lg py-2.5 pl-10 pr-4 text-sm placeholder-text-muted focus:ring-2 focus:ring-primary focus:outline-none transition"
                 />
-                </div>
-            )}
+            </div>
           </div>
 
           {/* Center: Wallet on Desktop */}

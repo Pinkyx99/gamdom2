@@ -17,6 +17,7 @@ import { ChatRail } from './components/ChatRail';
 import { TipUserModal } from './components/TipUserModal';
 import { UserProfileModal } from './components/UserProfileModal';
 import { CogIcon } from './components/icons';
+import { Sidebar } from './components/Sidebar';
 
 type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | ProfileLink['name'];
 
@@ -30,6 +31,7 @@ const App: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [tipRecipient, setTipRecipient] = useState<{ id: string; username: string } | null>(null);
   const [viewingProfileId, setViewingProfileId] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const getProfile = useCallback(async (session: Session) => {
     try {
@@ -120,7 +122,7 @@ const App: React.FC = () => {
       case 'home':
         return (
           <div className="max-w-7xl mx-auto space-y-8">
-            <Hero onSignUpClick={() => openAuthModal('signUp')} onGoogleSignInClick={() => handleOAuthSignIn('google')} />
+            <Hero session={session} onSignUpClick={() => openAuthModal('signUp')} onGoogleSignInClick={() => handleOAuthSignIn('google')} />
             <OriginalsRow onGameSelect={handleGameSelect} />
             <GameGrid />
           </div>
@@ -178,6 +180,12 @@ const App: React.FC = () => {
       />
 
       <div className="flex h-screen">
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+            onNavigate={(page) => setCurrentView(page as View)}
+            currentView={currentView}
+          />
           <div className="flex-1 min-w-0 flex flex-col">
               <Header
                 session={session}

@@ -1,9 +1,10 @@
+
 import React from 'react';
 
 interface MinesGridProps {
     gridState: ('hidden' | 'gem' | 'mine')[];
     onTileClick: (index: number) => void;
-    gameState: 'idle' | 'playing' | 'busted';
+    gameState: 'idle' | 'playing' | 'busted' | 'cashed_out';
 }
 
 const Tile: React.FC<{
@@ -14,7 +15,7 @@ const Tile: React.FC<{
 }> = React.memo(({ state, onClick, isRevealed, gameState }) => {
     
     const isPlaying = gameState === 'playing';
-    const isFinished = gameState === 'busted';
+    const isFinished = gameState === 'busted' || gameState === 'cashed_out';
 
     let content = null;
     let baseClasses = 'w-24 h-24 rounded-lg relative transition-all duration-300 ease-in-out transform';

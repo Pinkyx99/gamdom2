@@ -1,3 +1,5 @@
+
+
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Profile } from '../types';
 // FIX: Import `Session` type from '@supabase/supabase-js' instead of '../types' to resolve module export error.
@@ -78,7 +80,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
     }, [gameState, selectedNumbers.size]);
 
     const handlePlay = useCallback(async () => {
-        if (gameState !== 'idle' || selectedNumbers.size === 0 || !session || !profile || profile.balance < betAmount) {
+        if (gameState !== 'idle' || selectedNumbers.size === 0 || !session || !profile || Number(profile.balance) < betAmount) {
             return;
         }
 
@@ -124,8 +126,8 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                     throw new Error("Could not find user profile to update balance.");
                 }
 
-                // FIX: Safely convert the balance from the database, which may be of an unknown type, to a number.
-                const newBalance = (Number(currentProfile.balance) || 0) + payout;
+                // FIX: Safely convert the unknown balance from the database to a number before performing arithmetic.
+                const newBalance = (Number(currentProfile.balance as any) || 0) + payout;
                 
                 const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);
                 if (payoutError) throw payoutError;

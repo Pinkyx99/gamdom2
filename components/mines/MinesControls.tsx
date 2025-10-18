@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Profile } from '../../types';
 
@@ -6,7 +7,7 @@ interface MinesControlsProps {
     setBetAmount: (amount: number) => void;
     numMines: number;
     setNumMines: (mines: number) => void;
-    gameState: 'idle' | 'playing' | 'busted';
+    gameState: 'idle' | 'playing' | 'busted' | 'cashed_out';
     onStartGame: () => void;
     onCashout: () => void;
     profit: number;
@@ -56,8 +57,11 @@ export const MinesControls: React.FC<MinesControlsProps> = (props) => {
         if (gameState === 'busted') {
             return <button onClick={onReset} className="w-full h-12 text-center rounded-lg text-base font-bold bg-red-500 text-white transition-colors hover:bg-red-600">Busted! Play Again</button>;
         }
+        if (gameState === 'cashed_out') {
+            return <button onClick={onReset} className="w-full h-12 text-center rounded-lg text-base font-bold bg-green-500 text-white transition-colors hover:bg-green-600">Cashed Out ${profit.toFixed(2)}! Play Again</button>;
+        }
         if (gameState === 'playing') {
-             return <button onClick={onCashout} className="w-full h-12 text-center rounded-lg text-base font-bold bg-green-500 text-white transition-colors hover:bg-green-600">Cashout ${profit.toFixed(2)}</button>;
+             return <button onClick={onCashout} disabled={profit <= 0} className="w-full h-12 text-center rounded-lg text-base font-bold bg-green-500 text-white transition-colors hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed">Cashout ${profit.toFixed(2)}</button>;
         }
         return <button onClick={onStartGame} disabled={insufficientFunds || betAmount <= 0} className="w-full h-12 text-center rounded-lg text-base font-bold bg-[#17d182] text-white transition-colors hover:bg-[#1ae88f] disabled:bg-gray-600 disabled:cursor-not-allowed">{insufficientFunds ? 'Insufficient Funds' : 'Start playing'}</button>;
     };

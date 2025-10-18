@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useMemo } from 'react';
 import { Profile } from '../types';
 import { Session } from '@supabase/supabase-js';
@@ -62,8 +63,30 @@ interface MinesGamePageProps {
     onProfileUpdate: () => void;
 }
 
+// --- Multiplier Calculation ---
+const HOUSE_EDGE = 0.01; // 1%
+
+function combinations(n: number, k: number): number {
+    if (k < 0 || k > n) return 0;
+    if (k === 0 || k === n) return 1;
+    if (k > n / 2) k = n - k;
+    let res = 1;
+    for (let i = 1; i <= k; i++) {
+        res = res * (n - i + 1) / i;
+    }
+    return res;
+}
+
+const calculateMultiplier = (gemsRevealed: number, mines: number): number => {
+    if (gemsRevealed === 0) return 1;
+    if (25 - mines < gemsRevealed) return 0; // Should not happen with valid input
+    const multiplier = (1 - HOUSE_EDGE) * combinations(25, gemsRevealed) / combinations(25 - mines, gemsRevealed);
+    return multiplier;
+};
+
+
 const MinesGamePage: React.FC<MinesGamePageProps> = ({ profile, session, onProfileUpdate }) => {
-    const [gameState, setGameState] = useState<'idle' | 'playing' | 'busted'>('idle');
+    const [gameState, setGameState] = useState<'idle' | 'playing' | 'busted' | 'cashed_out'>('idle');
     const [betAmount, setBetAmount] = useState(0.01);
     const [numMines, setNumMines] = useState(1);
     const [gridState, setGridState] = useState<( 'hidden' | 'gem' | 'mine' )[]>(Array(25).fill('hidden'));
@@ -131,35 +154,50 @@ const MinesGamePage: React.FC<MinesGamePageProps> = ({ profile, session, onProfi
     const handleTileClick = useCallback((index: number) => {
         if (gameState !== 'playing' || revealedTiles.has(index)) return;
 
-        const newRevealedTiles = new Set(revealedTiles).add(index);
+        const newRevealedTiles = new Set(revealedTiles);
         const newGridState = [...gridState];
 
         if (mineLocations.has(index)) {
             setGameState('busted');
             showFinalGrid(index);
         } else {
+            newRevealedTiles.add(index);
             setRevealedTiles(newRevealedTiles);
             newGridState[index] = 'gem';
             setGridState(newGridState);
-            // In a real scenario, you'd calculate profit based on a multiplier from the backend
-            // For now, let's just add a simple amount per gem
-            setProfit(p => p + betAmount * 0.1 * (25 - numMines) / 25); 
+            
+            // Calculate new profit based on multiplier
+            const gemsRevealedCount = newRevealedTiles.size;
+            const multiplier = calculateMultiplier(gemsRevealedCount, numMines);
+            const newProfit = betAmount * multiplier - betAmount;
+            setProfit(newProfit);
         }
     }, [gameState, mineLocations, gridState, revealedTiles, betAmount, numMines, showFinalGrid]);
 
     const handleCashout = useCallback(async () => {
         if (gameState !== 'playing' || revealedTiles.size === 0) return;
 
-        const { error: rpcError } = await supabase.rpc('cashout_mines_game', { profit_in: profit });
-        if (rpcError) {
-             setError(rpcError.message || "Cashout failed.");
-             return;
+        const payoutAmount = betAmount + profit;
+
+        if (payoutAmount > 0 && session) {
+            try {
+                const { data: currentProfile, error: fetchError } = await supabase.from('profiles').select('balance').eq('id', session.user.id).single();
+                if (fetchError) throw fetchError;
+                if (!currentProfile) throw new Error("Could not find user profile.");
+
+                const newBalance = (Number(currentProfile.balance) || 0) + payoutAmount;
+                const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);
+                if (payoutError) throw payoutError;
+            } catch (e: any) {
+                setError(e.message || "Cashout failed.");
+                return;
+            }
         }
 
         onProfileUpdate();
-        setGameState('busted'); // Visually ends the game
+        setGameState('cashed_out');
         showFinalGrid();
-    }, [gameState, revealedTiles.size, profit, showFinalGrid, onProfileUpdate]);
+    }, [gameState, revealedTiles.size, profit, betAmount, session, showFinalGrid, onProfileUpdate]);
     
     return (
         <div className="flex-1 flex items-center justify-center p-4 overflow-hidden">

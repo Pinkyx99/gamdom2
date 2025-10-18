@@ -6,12 +6,13 @@ import { UsdIcon, GoogleIcon } from './components/icons';
 
 export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
   { name: 'Home', href: '#', icon: HomeIcon, active: true },
+  { name: 'Crash', href: '#', icon: CrashIcon },
+  { name: 'Mines', href: '#', icon: MinesIcon },
+  { name: 'Roulette', href: '#', icon: RouletteIcon },
+  { name: 'Dice', href: '#', icon: DiceIcon },
   { name: 'Promotions', href: '#', icon: PromotionsIcon },
   { name: 'Leaderboard', href: '#', icon: LeaderboardIcon },
   { name: 'Challenges', href: '#', icon: ChallengesIcon },
-  { name: 'Instant Payout', href: '#', icon: InstantPayoutIcon },
-  { name: 'Social Casino', href: '#', icon: SocialCasinoIcon, isDropdown: true },
-  { name: 'Sports', href: '#', icon: SportsIcon },
 ];
 
 export const SIDEBAR_BOTTOM_NAV_ITEMS: SidebarNavItem[] = [
