@@ -84,7 +84,7 @@ const App: React.FC = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: 'https://miheal.vercel.app',
         queryParams: {
           prompt: 'select_account',
         },

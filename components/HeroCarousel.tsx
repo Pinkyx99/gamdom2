@@ -8,20 +8,16 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ session, onSignUpClick, onGoogleSignInClick }) => {
     return (
-        <div className="relative rounded-2xl p-6 lg:p-8 flex flex-col justify-between min-h-[450px] bg-cover" style={{backgroundImage: 'url(https://i.imgur.com/VZPuEhD.png)', backgroundPosition: 'center center'}}>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent rounded-2xl"></div>
+        <div className="relative rounded-2xl p-6 lg:p-8 flex flex-col justify-end items-start text-left min-h-[450px] bg-cover" style={{backgroundImage: 'url(https://i.imgur.com/VZPuEhD.png)', backgroundPosition: 'center 20%'}}>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent rounded-2xl"></div>
             
             <div className="relative z-10">
-                {/* This empty div is kept to maintain the flexbox structure but the content has been removed. */}
-            </div>
-
-            <div className="relative z-10 flex justify-start items-end">
-                {/* Left section: Game Info & CTA */}
+                {/* Bottom-left section: Game Info & CTA */}
                 <div>
                     <h1 className="text-5xl lg:text-6xl font-black text-white" style={{textShadow: '0 4px 15px rgba(0,0,0,0.5)'}}>
-                        Le Bandit
+                        Gates of Olympus
                     </h1>
-                    <div className="mt-6 flex items-center space-x-4">
+                    <div className="mt-6 flex flex-wrap items-center justify-start gap-4">
                         {session ? (
                              <button 
                                 className="bg-primary hover:bg-primary-light text-background font-semibold px-8 py-3 rounded-lg text-base transition-transform duration-200 hover:scale-105 active:scale-100 shadow-glow-primary"
