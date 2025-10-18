@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/HeroCarousel';
@@ -36,65 +37,53 @@ const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigateTo = useCallback((view: View) => {
-    // Prefix with './' to ensure the path is resolved relative to the current document's location.
-    // This is crucial in sandboxed environments that might have a different <base> href, which
-    // was causing the browser to incorrectly resolve paths to an external domain.
+    // Set the URL hash. The 'hashchange' event listener will handle updating the view state.
     const path = view === 'home' 
-      ? './' 
-      : `./${view.toLowerCase().replace(/ /g, '-')}`;
+      ? '' 
+      : `/${view.toLowerCase().replace(/ /g, '-')}`;
     
-    // The browser gracefully handles redundant pushes to the same URL, so no check is needed.
-    window.history.pushState({ view }, '', path);
-    
-    setCurrentView(view);
+    // Only update if the hash is different to avoid redundant event triggers and history entries.
+    if (window.location.hash !== `#${path}`) {
+      window.location.hash = path;
+    }
   }, []);
   
   useEffect(() => {
-    const path = window.location.pathname.substring(1).toLowerCase();
-    const validGameViews = ['crash', 'mines', 'roulette', 'dice', 'roulette-info'];
-    const validProfileViews = PROFILE_LINKS.map(l => l.name.toLowerCase().replace(' ', '-'));
-    
-    let initialView: View = 'home';
-    if (path === '') {
-        initialView = 'home';
-    } else if (validGameViews.includes(path)) {
-        initialView = path as View;
-    } else if (validProfileViews.includes(path)) {
-        const profileView = PROFILE_LINKS.find(link => link.name.toLowerCase().replace(' ', '-') === path);
-        if (profileView) {
-            initialView = profileView.name;
-        }
-    }
-    setCurrentView(initialView);
-
-    const handlePopState = (event: PopStateEvent) => {
-      // If state is present, use it
-      if (event.state && event.state.view) {
-        setCurrentView(event.state.view);
-        return;
-      }
+    // This function reads the URL hash and updates the component state.
+    const handleRouting = () => {
+      // Get path from hash, remove '#' and any leading '/'
+      const hash = window.location.hash.substring(1);
+      const path = hash.startsWith('/') ? hash.substring(1).toLowerCase() : hash.toLowerCase();
       
-      // Fallback for direct URL navigation or states not pushed by our app
-      const popPath = window.location.pathname.substring(1).toLowerCase();
-      let popView: View = 'home';
-      if (popPath === '') {
-          popView = 'home';
-      } else if (validGameViews.includes(popPath)) {
-          popView = popPath as View;
-      } else if (validProfileViews.includes(popPath)) {
-          const profileView = PROFILE_LINKS.find(link => link.name.toLowerCase().replace(' ', '-') === popPath);
+      const validGameViews = ['crash', 'mines', 'roulette', 'dice', 'roulette-info'];
+      const validProfileViews = PROFILE_LINKS.map(l => l.name.toLowerCase().replace(' ', '-'));
+      
+      let view: View = 'home';
+      if (path === '') {
+          view = 'home';
+      } else if (validGameViews.includes(path)) {
+          view = path as View;
+      } else if (validProfileViews.includes(path)) {
+          const profileView = PROFILE_LINKS.find(link => link.name.toLowerCase().replace(' ', '-') === path);
           if (profileView) {
-              popView = profileView.name;
+              view = profileView.name;
           }
       }
-      setCurrentView(popView);
+      setCurrentView(view);
     };
 
-    window.addEventListener('popstate', handlePopState);
+    // Run routing logic on initial page load
+    handleRouting();
+
+    // Listen for hash changes (e.g., back/forward buttons, navigateTo calls)
+    window.addEventListener('hashchange', handleRouting);
+    
+    // Cleanup listener on component unmount
     return () => {
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handleRouting);
     };
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once on mount.
+
 
   const getProfile = useCallback(async (session: Session) => {
     try {

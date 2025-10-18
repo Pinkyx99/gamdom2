@@ -80,7 +80,8 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
     }, [gameState, selectedNumbers.size]);
 
     const handlePlay = useCallback(async () => {
-        if (gameState !== 'idle' || selectedNumbers.size === 0 || !session || !profile || Number(profile.balance) < betAmount) {
+        // FIX: Cast `profile.balance` to `any` before converting to a number to prevent type errors with `unknown`.
+        if (gameState !== 'idle' || selectedNumbers.size === 0 || !session || !profile || Number(profile.balance as any) < betAmount) {
             return;
         }
 
