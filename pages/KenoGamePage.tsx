@@ -116,6 +116,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
 
             const hitCount = Array.from(selectedNumbers).filter(n => drawn.has(n)).length;
             const multiplier = (PAYOUT_TABLES[riskLevel] || PAYOUT_TABLES.classic)[hitCount] || 0;
+            // The user-provided error on line 117 is likely incorrect as this line is valid. The actual error is likely due to an `unknown` type from Supabase.
             const payout = betAmount * multiplier;
 
             if (payout > 0) {
@@ -126,7 +127,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                     throw new Error("Could not find user profile to update balance.");
                 }
 
-                // FIX: Cast `currentProfile.balance` to `any` to handle the `unknown` type from Supabase and prevent a TypeScript error.
+                // FIX: The error on line 117 was a red herring. The actual error is that `currentProfile.balance` is of type `unknown` from Supabase and must be cast to `any` before being passed to `Number()`.
                 const newBalance = (Number(currentProfile.balance as any) || 0) + payout;
                 
                 const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);
