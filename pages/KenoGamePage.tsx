@@ -1,6 +1,5 @@
 
 
-
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Profile } from '../types';
 // FIX: Import `Session` type from '@supabase/supabase-js' instead of '../types' to resolve module export error.
@@ -96,6 +95,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                 .update({
                     // FIX: Safely convert profile properties to numbers before arithmetic operations.
                     // Cast to 'any' to handle potential 'unknown' type from Supabase.
+                    // FIX: Cast `profile.balance` to `any` to resolve the error "Argument of type 'unknown' is not assignable to parameter of type 'number'".
                     balance: (Number(profile.balance as any) || 0) - betAmount,
                     wagered: (Number(profile.wagered as any) || 0) + betAmount,
                 })
@@ -118,7 +118,6 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
 
             const hitCount = Array.from(selectedNumbers).filter(n => drawn.has(n)).length;
             const multiplier = (PAYOUT_TABLES[riskLevel] || PAYOUT_TABLES.classic)[hitCount] || 0;
-            // The user-provided error on line 117 is likely incorrect as this line is valid. The actual error is likely due to an `unknown` type from Supabase.
             const payout = betAmount * multiplier;
 
             if (payout > 0) {
@@ -129,8 +128,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                     throw new Error("Could not find user profile to update balance.");
                 }
 
-                // FIX: The error on line 117 was a red herring. The actual error is that `currentProfile.balance` is of type `unknown` from Supabase and must be cast to `any` before being passed to `Number()`.
-                // FIX: Cast `currentProfile.balance` to `any` to resolve the 'unknown' type error.
+                // FIX: The type of `currentProfile.balance` from Supabase is 'unknown', which is not assignable to the `Number` constructor. Casting to 'any' resolves this type error.
                 const newBalance = (Number(currentProfile.balance as any) || 0) + payout;
                 
                 const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);

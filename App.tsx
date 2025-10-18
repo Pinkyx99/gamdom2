@@ -36,10 +36,16 @@ const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigateTo = useCallback((view: View) => {
-    const path = view === 'home' ? '/' : `/${view.toLowerCase().replace(' ', '-')}`;
-    if (window.location.pathname !== path) {
-        window.history.pushState({ view }, '', path);
-    }
+    // Prefix with './' to ensure the path is resolved relative to the current document's location.
+    // This is crucial in sandboxed environments that might have a different <base> href, which
+    // was causing the browser to incorrectly resolve paths to an external domain.
+    const path = view === 'home' 
+      ? './' 
+      : `./${view.toLowerCase().replace(/ /g, '-')}`;
+    
+    // The browser gracefully handles redundant pushes to the same URL, so no check is needed.
+    window.history.pushState({ view }, '', path);
+    
     setCurrentView(view);
   }, []);
   
