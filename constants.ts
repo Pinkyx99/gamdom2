@@ -1,6 +1,8 @@
+
+
 import React from 'react';
 import { SidebarNavItem, ProfileLink, RoyaltyRank, Game } from './types';
-import { HomeIcon, PromotionsIcon, LeaderboardIcon, ChallengesIcon, InstantPayoutIcon, SocialCasinoIcon, SportsIcon, CustomerHelpIcon, FaqIcon, UserCircleIcon, ChartBarIcon, ArrowsRightLeftIcon, BellIcon, CogIcon, UsersIcon, ShieldCheckIcon, ArrowRightOnRectangleIcon, DiceIcon, CrashIcon, RouletteIcon, PlinkoIcon, MinesIcon, BlackjackIcon, SlotMachineIcon } from './components/icons';
+import { HomeIcon, UserCircleIcon, ChartBarIcon, ArrowsRightLeftIcon, BellIcon, CogIcon, UsersIcon, ShieldCheckIcon, ArrowRightOnRectangleIcon, DiceIcon, CrashIcon, RouletteIcon, PlinkoIcon, MinesIcon, BlackjackIcon, SlotMachineIcon, TrophyIcon, ShieldExclamationIcon, Squares2X2Icon, CurrencyDollarIcon, MegaphoneIcon, ClipboardDocumentListIcon } from './components/icons';
 import { UsdIcon, GoogleIcon } from './components/icons';
 
 
@@ -12,15 +14,10 @@ export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
   { name: 'Dice', href: '#', icon: DiceIcon },
   { name: 'Blackjack', href: '#', icon: BlackjackIcon },
   { name: 'Slots', href: '#', icon: SlotMachineIcon },
-  { name: 'Promotions', href: '#', icon: PromotionsIcon },
-  { name: 'Leaderboard', href: '#', icon: LeaderboardIcon },
-  { name: 'Challenges', href: '#', icon: ChallengesIcon },
+  { name: 'Rewards', href: '#', icon: TrophyIcon },
 ];
 
-export const SIDEBAR_BOTTOM_NAV_ITEMS: SidebarNavItem[] = [
-  { name: 'Customer Help', href: '#', icon: CustomerHelpIcon },
-  { name: 'FAQs', href: '#', icon: FaqIcon },
-];
+export const SIDEBAR_BOTTOM_NAV_ITEMS: SidebarNavItem[] = [];
 
 const BtcIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/bitcoin--v1.png", alt: "BTC", className: "w-6 h-6" });
 const EthIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/ethereum.png", alt: "ETH", className: "w-6 h-6" });
@@ -28,7 +25,7 @@ const LtcIcon = () => React.createElement('img', { src: "https://img.icons8.com/
 const TrxIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/tron.png", alt: "TRX", className: "w-6 h-6" });
 const XrpIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/xrp.png", alt: "XRP", className: "w-6 h-6" });
 const DogeIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/dogecoin.png", alt: "DOGE", className: "w-6 h-6" });
-const SolIcon = () => React.createElement('img', { src: "https://img.icons8.com/fluency/48/solana.png", alt: "SOL", className: "w-6 h-6" });
+const SolIcon = () => React.createElement('img', { src: "https://img.icons8.com/color/48/solana.png", alt: "SOL", className: "w-6 h-6" });
 
 export const WALLET_CURRENCIES = [
     { code: 'USD', balance: '0.00', icon: React.createElement(UsdIcon, { className: "w-6 h-6" }) },
@@ -79,6 +76,17 @@ export const PROFILE_LINKS: ProfileLink[] = [
     { name: 'Log out', icon: ArrowRightOnRectangleIcon },
 ];
 
+export const ADMIN_SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
+  { name: 'Dashboard', href: '#', icon: Squares2X2Icon },
+  { name: 'Users', href: '#', icon: UsersIcon },
+  { name: 'Games', href: '#', icon: DiceIcon },
+  { name: 'Financials', href: '#', icon: CurrencyDollarIcon },
+  { name: 'Announcements', href: '#', icon: MegaphoneIcon },
+  { name: 'Settings', href: '#', icon: CogIcon },
+  { name: 'Audit Log', href: '#', icon: ClipboardDocumentListIcon },
+];
+
+
 // FIX: Added missing constants for Rewards pages
 export const REWARDS_HERO_SLIDES = [
     { preTitle: 'Daily', title: 'Rakeback', subtitle: 'Claim your rakeback every day!', imageUrl: 'https://i.imgur.com/L4pP31z.png', textColor: 'text-white' },
@@ -93,19 +101,27 @@ export const CLAIMABLE_REWARDS = [
 ];
 
 export const ROYALTY_RANKS: RoyaltyRank[] = [
-    { name: 'Bronze I', tier: 'Bronze', status: 'claimed' },
-    { name: 'Bronze II', tier: 'Bronze', status: 'unlocked' },
-    { name: 'Bronze III', tier: 'Bronze', status: 'locked' },
-    { name: 'Silver I', tier: 'Silver', status: 'locked' },
-    { name: 'Silver II', tier: 'Silver', status: 'locked' },
-    { name: 'Gold I', tier: 'Gold', status: 'locked' },
+    { name: 'Bronze 1', tier: 'Bronze', status: 'claimed', image: 'https://i.imgur.com/RTnegm7.png', levelRequirement: 3, rewardAmount: 5 },
+    { name: 'Bronze 2', tier: 'Bronze', status: 'unlocked', image: 'https://i.imgur.com/yaZok1C.png', levelRequirement: 6, rewardAmount: 10 },
+    { name: 'Bronze 3', tier: 'Bronze', status: 'locked', image: 'https://i.imgur.com/48ebNM3.png', levelRequirement: 8, rewardAmount: 15 },
+    { name: 'Silver 1', tier: 'Silver', status: 'locked', image: 'https://i.imgur.com/mEef1zo.png', levelRequirement: 10, rewardAmount: 25 },
+    { name: 'Silver 2', tier: 'Silver', status: 'locked', image: 'https://i.imgur.com/Z8lhufC.png', levelRequirement: 12, rewardAmount: 35 },
+    { name: 'Silver 3', tier: 'Silver', status: 'locked', image: 'https://i.imgur.com/5l8SDlJ.png', levelRequirement: 15, rewardAmount: 50 },
+    { name: 'Gold 1', tier: 'Gold', status: 'locked', image: 'https://i.imgur.com/uaXVsFn.png', levelRequirement: 20, rewardAmount: 75 },
+    { name: 'Gold 2', tier: 'Gold', status: 'locked', image: 'https://i.imgur.com/7TtoXGz.png', levelRequirement: 30, rewardAmount: 100 },
+    { name: 'Gold 3', tier: 'Gold', status: 'locked', image: 'https://i.imgur.com/6HRlKAt.png', levelRequirement: 40, rewardAmount: 150 },
+    { name: 'Emerald 1', tier: 'Emerald', status: 'locked', image: 'https://i.imgur.com/Mm1gNxt.png', levelRequirement: 50, rewardAmount: 250 },
+    { name: 'Emerald 2', tier: 'Emerald', status: 'locked', image: 'https://i.imgur.com/u4pdS0w.png', levelRequirement: 60, rewardAmount: 350 },
+    { name: 'Emerald 3', tier: 'Emerald', status: 'locked', image: 'https://i.imgur.com/oQTUieh.png', levelRequirement: 75, rewardAmount: 500 },
+    { name: 'Sapphire 1', tier: 'Sapphire', status: 'locked', image: 'https://i.imgur.com/H1dRXrH.png', levelRequirement: 80, rewardAmount: 750 },
+    { name: 'Sapphire 2', tier: 'Sapphire', status: 'locked', image: 'https://i.imgur.com/Qd5bKc5.png', levelRequirement: 85, rewardAmount: 1000 },
+    { name: 'Sapphire 3', tier: 'Sapphire', status: 'locked', image: 'https://i.imgur.com/fWFoKr9.png', levelRequirement: 100, rewardAmount: 1500 },
 ];
 
 export const ORIGINAL_GAMES: ({ name: string; image: string; rtp: number; blobColor: string; comingSoon?: boolean })[] = [
   { name: 'Mines', image: 'https://i.imgur.com/GzQSFH0.png', rtp: 99, blobColor: '#64ffda' },
   { name: 'Crash', image: 'https://i.imgur.com/D4qpkPt.png', rtp: 99, blobColor: '#ef4444' },
   { name: 'Roulette', image: 'https://i.imgur.com/0rDInCq.png', rtp: 97.3, blobColor: '#8b5cf6' },
-  { name: 'Dice', image: 'https://i.imgur.com/P6P4NCa.png', rtp: 99, blobColor: '#3b82f6' },
   { name: 'Slots', image: 'https://i.imgur.com/UQVF1x6.png', rtp: 96, blobColor: '#f59e0b', comingSoon: true },
   { name: 'Blackjack', image: 'https://i.imgur.com/ESlUshO.png', rtp: 99.5, blobColor: '#a78bfa' },
 ];

@@ -22,8 +22,10 @@ import { Sidebar } from './components/Sidebar';
 import { PROFILE_LINKS } from './constants';
 import RouletteInfoPage from './pages/RouletteInfoPage';
 import SlotsPage from './pages/SlotsPage';
+import RewardsPage from './pages/RewardsPage';
+import AdminPage from './pages/AdminPage';
 
-type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | 'blackjack' | 'roulette-info' | 'slots' | ProfileLink['name'];
+type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | 'blackjack' | 'roulette-info' | 'slots' | 'rewards' | ProfileLink['name'];
 
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -36,6 +38,20 @@ const App: React.FC = () => {
   const [tipRecipient, setTipRecipient] = useState<{ id: string; username: string } | null>(null);
   const [viewingProfileId, setViewingProfileId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
+
+  // Hide loading screen on initial app load
+  useEffect(() => {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        // Start fading out
+        loadingScreen.style.opacity = '0';
+        // Remove from DOM after transition
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
+  }, []);
 
   const navigateTo = useCallback((view: View) => {
     // Set the URL hash. The 'hashchange' event listener will handle updating the view state.
@@ -56,7 +72,7 @@ const App: React.FC = () => {
       const hash = window.location.hash.substring(1);
       const path = hash.startsWith('/') ? hash.substring(1).toLowerCase() : hash.toLowerCase();
       
-      const validGameViews = ['crash', 'mines', 'roulette', 'dice', 'blackjack', 'roulette-info', 'slots'];
+      const validGameViews = ['crash', 'mines', 'roulette', 'dice', 'blackjack', 'roulette-info', 'slots', 'rewards'];
       const validProfileViews = PROFILE_LINKS.map(l => l.name.toLowerCase().replace(' ', '-'));
       
       let view: View = 'home';
@@ -85,24 +101,24 @@ const App: React.FC = () => {
     };
   }, []); // Empty dependency array ensures this runs only once on mount.
 
-
-  const getProfile = useCallback(async (session: Session) => {
+  // To fix the "claimed_ranks does not exist" error, run this SQL in your Supabase SQL Editor:
+  // ALTER TABLE profiles
+  // ADD COLUMN claimed_ranks TEXT[] DEFAULT ARRAY[]::TEXT[];
+  const getProfile = useCallback(async () => {
     try {
-      const { user } = session;
+      // Use the new RPC function to get the profile with the role name included
       const { data, error } = await supabase
-        .from('profiles')
-        .select(`id, username, avatar_url, balance, wagered, games_played, has_claimed_welcome_bonus`)
-        .eq('id', user.id)
+        .rpc('get_my_profile')
         .single();
 
       if (error) {
-        // If the database trigger is set up correctly, this error should not happen for a missing profile.
-        // It would indicate a different problem (e.g., network issue, RLS policy).
+        console.error("Error getting profile with role:", error);
         throw error;
       }
 
       if (data) {
-        setProfile({ ...data, email: user.email || '' });
+        // The RPC returns all necessary fields, so we can set the profile directly
+        setProfile(data as Profile);
       }
     } catch (error) {
       console.log('Error getting profile:', error);
@@ -112,13 +128,13 @@ const App: React.FC = () => {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if (session) getProfile(session);
+      if (session) getProfile();
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) {
-        getProfile(session);
+        getProfile();
       } else {
         setProfile(null);
         navigateTo('home');
@@ -150,7 +166,7 @@ const App: React.FC = () => {
   };
 
   const handleProfileUpdate = useCallback(() => {
-    if (session) getProfile(session);
+    if (session) getProfile();
   }, [session, getProfile]);
 
   const handleGameSelect = (gameName: string) => {
@@ -169,6 +185,7 @@ const App: React.FC = () => {
         case 'dice': return 'bg-[#081018]';
         case 'blackjack': return 'bg-[#1a1a1a]';
         case 'slots': return 'bg-background';
+        case 'rewards': return 'bg-background';
         default: return 'bg-background';
     }
   }
@@ -184,13 +201,7 @@ const App: React.FC = () => {
           </div>
         );
       case 'crash':
-        return (
-          <div className="flex flex-col items-center justify-center h-full text-center text-text-muted p-8">
-            <CogIcon className="w-24 h-24 text-primary animate-spin-slow" />
-            <h1 className="mt-8 text-4xl font-bold text-white">Repairing...</h1>
-            <p className="mt-2 max-w-md">The Crash game is currently undergoing maintenance to improve your experience. Please check back later.</p>
-          </div>
-        );
+        return <CrashGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
       case 'mines':
         return <MinesGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
       case 'roulette':
@@ -208,6 +219,8 @@ const App: React.FC = () => {
         return <BlackjackGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
       case 'slots':
         return <SlotsPage session={session} onSignInClick={() => openAuthModal('signIn')} />;
+      case 'rewards':
+        return <RewardsPage profile={profile} onProfileUpdate={handleProfileUpdate} />;
       default: // Profile pages
         return (
             <ProfilePage
@@ -240,6 +253,7 @@ const App: React.FC = () => {
         onClose={() => setViewingProfileId(null)}
         onTipUser={setTipRecipient}
       />
+      <AdminPage show={isAdminPanelOpen} onClose={() => setIsAdminPanelOpen(false)} profile={profile} />
 
       <div className="flex h-screen">
           <Sidebar
@@ -259,6 +273,7 @@ const App: React.FC = () => {
                 currentView={currentView}
                 onChatToggle={() => setIsChatOpen(true)}
                 onProfileUpdate={handleProfileUpdate}
+                onOpenAdminPanel={() => setIsAdminPanelOpen(true)}
               />
               <main className="flex-1 overflow-y-auto no-scrollbar p-6 lg:p-8">
                 {renderMainContent()}
@@ -268,7 +283,7 @@ const App: React.FC = () => {
           {/* Desktop Chat Rail */}
           <div className="hidden xl:block w-[320px] flex-shrink-0">
             <div className="sticky top-0 h-screen">
-                <ChatRail session={session} onTipUser={setTipRecipient} onViewProfile={setViewingProfileId} />
+                <ChatRail session={session} profile={profile} onTipUser={setTipRecipient} onViewProfile={setViewingProfileId} />
             </div>
           </div>
 
@@ -276,7 +291,7 @@ const App: React.FC = () => {
           <div className={`fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out xl:hidden ${ isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
               <div className="absolute inset-0 bg-black/50" onClick={() => setIsChatOpen(false)}></div>
               <div className="relative w-[320px] h-full float-right">
-                <ChatRail session={session} onClose={() => setIsChatOpen(false)} onTipUser={setTipRecipient} onViewProfile={setViewingProfileId} />
+                <ChatRail session={session} profile={profile} onClose={() => setIsChatOpen(false)} onTipUser={setTipRecipient} onViewProfile={setViewingProfileId} />
               </div>
           </div>
       </div>

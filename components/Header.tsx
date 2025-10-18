@@ -17,9 +17,10 @@ interface HeaderProps {
     currentView: string;
     onChatToggle: () => void;
     onProfileUpdate: () => void;
+    onOpenAdminPanel: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick, onSignUpClick, onWalletButtonClick, onNavigate, currentView, onChatToggle, onProfileUpdate }) => {
+export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick, onSignUpClick, onWalletButtonClick, onNavigate, currentView, onChatToggle, onProfileUpdate, onOpenAdminPanel }) => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const notificationsRef = useRef<HTMLDivElement>(null);
 
@@ -90,6 +91,7 @@ export const Header: React.FC<HeaderProps> = ({ session, profile, onSignInClick,
                     profile={profile} 
                     onNavigate={onNavigate} 
                     onLogout={async () => { await supabase.auth.signOut(); }} 
+                    onOpenAdminPanel={onOpenAdminPanel}
                 />
               </>
             ) : (

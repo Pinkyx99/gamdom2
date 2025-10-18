@@ -17,6 +17,8 @@ export interface Profile {
   wagered: number;
   games_played: number;
   has_claimed_welcome_bonus: boolean;
+  claimed_ranks: string[] | null;
+  role_name: string | null;
 }
 
 // FIX: Added missing ProfileLink type definition
@@ -109,6 +111,9 @@ export interface RoyaltyRank {
     name: string;
     tier: 'Bronze' | 'Silver' | 'Gold' | 'Emerald' | 'Sapphire' | 'Ruby' | 'Diamond' | 'Opal';
     status: 'locked' | 'unlocked' | 'claimed';
+    image: string;
+    levelRequirement: number;
+    rewardAmount: number;
 }
 
 export interface Game {
@@ -118,6 +123,7 @@ export interface Game {
   image: string;
   tags?: string[];
   rtp?: number;
+  gameId?: string;
 }
 
 export interface ChatMessage {
@@ -128,6 +134,7 @@ export interface ChatMessage {
   profiles: {
     username: string;
     avatar_url: string;
+    wagered: number;
   };
 }
 
@@ -137,4 +144,49 @@ export interface MinesRoundResult {
     cashedOutAt: number | null; // gems found
     payout: number;
     busted: boolean;
+}
+
+// FIX: Added RollResult type for Dice game
+export interface RollResult {
+    id: string;
+    value: number;
+    win: boolean;
+    betAmount: number;
+    payout: number;
+    multiplier: number;
+    isRollOver: boolean;
+    rollValue: number;
+    createdAt: string;
+}
+
+// Admin Panel Types
+export type AdminRole = 'Owner' | 'Admin' | 'Moderator' | 'Support' | 'User';
+export type UserStatus = 'Online' | 'Offline' | 'Banned';
+
+export interface AdminUser {
+    id: string;
+    username: string;
+    email: string | null;
+    avatar_url: string;
+    role: AdminRole | string | null;
+    balance: number;
+    status: UserStatus;
+    last_seen: string | null;
+}
+
+// Added for the User Management Modal
+export interface Role {
+    id: string;
+    name: string;
+}
+
+export interface MuteBanRecord {
+    id: string;
+    type: 'mute' | 'ban';
+    reason: string;
+    expires_at: string | null;
+    created_at: string;
+    moderator: {
+        username: string;
+    } | null;
 }

@@ -1,15 +1,18 @@
 
 
-import React, { useState, useEffect, useCallback, useRef, createContext } from 'react';
+
+
+import React, { useState, useEffect, useCallback, useRef, createContext, useMemo } from 'react';
 import { PlayerBets } from '../components/crash/PlayerBets';
 import { BettingHistory } from '../components/crash/BettingHistory';
 import { GameDisplay } from '../components/crash/GameDisplay';
 import { BettingControls } from '../components/crash/BettingControls';
 import { MyBets } from '../components/crash/MyBets';
-import { Profile, CrashBet, CashoutEvent } from '../types';
+import { Profile, CrashBet, CashoutEvent, GameState } from '../types';
 import { Session } from '@supabase/supabase-js';
 import { ProvablyFairModal } from '../components/crash/ProvablyFairModal';
 import { useRealtimeCrash } from '../hooks/useRealtimeCrash';
+import { CrashIcon } from '../components/icons';
 
 interface CrashGamePageProps {
     profile: Profile | null;
@@ -20,6 +23,19 @@ interface CrashGamePageProps {
 export const MultiplierContext = createContext(1.00);
 
 const CrashGamePage: React.FC<CrashGamePageProps> = ({ profile, session, onProfileUpdate }) => {
+    // const {
+    //     gameState,
+    //     multiplier,
+    //     countdown,
+    //     allBets,
+    //     myBets,
+    //     history,
+    //     placeBet,
+    //     cashout,
+    // } = useRealtimeCrash(session, onProfileUpdate);
+    
+    // [TEMPORARY] Mock data for maintenance screen
+    // FIX: Replaced mock data declarations with useMemo to prevent TypeScript from over-narrowing the type of `gameState`, which caused comparison errors.
     const {
         gameState,
         multiplier,
@@ -29,8 +45,17 @@ const CrashGamePage: React.FC<CrashGamePageProps> = ({ profile, session, onProfi
         history,
         placeBet,
         cashout,
-    } = useRealtimeCrash(session, onProfileUpdate);
-    
+    } = useMemo(() => ({
+        gameState: 'connecting' as GameState,
+        multiplier: 1.00,
+        countdown: 0,
+        allBets: [] as CrashBet[],
+        myBets: [] as CrashBet[],
+        history: [] as any[],
+        placeBet: async () => ({ success: false, message: 'Game is under maintenance.' }),
+        cashout: async () => ({ success: false, message: 'Game is under maintenance.' }),
+    }), []);
+
     const [cashoutEvents, setCashoutEvents] = useState<CashoutEvent[]>([]);
     const [isFairnessModalOpen, setIsFairnessModalOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -104,7 +129,8 @@ const CrashGamePage: React.FC<CrashGamePageProps> = ({ profile, session, onProfi
             setError("You can place a maximum of 6 bets per round.");
             return;
         }
-        const result = await placeBet(betAmountStr, autoCashoutStr);
+        // FIX: Called mock placeBet function without arguments to match its definition.
+        const result = await placeBet();
         if (!result.success) {
             setError(result.message);
         }
@@ -113,12 +139,13 @@ const CrashGamePage: React.FC<CrashGamePageProps> = ({ profile, session, onProfi
     const handleCashout = useCallback(async (betId: string) => {
         setPendingCashoutIds(prev => new Set(prev).add(betId));
         setLoadingBetId(betId);
-        const result = await cashout(betId, multiplier);
+        // FIX: Called mock cashout function without arguments to match its definition.
+        const result = await cashout();
         if (!result.success) {
             setError(result.message);
         }
         setTimeout(() => setLoadingBetId(null), 200);
-    }, [cashout, multiplier]);
+    }, [cashout]);
 
     // Effect for auto-cashouts
     useEffect(() => {
@@ -133,40 +160,12 @@ const CrashGamePage: React.FC<CrashGamePageProps> = ({ profile, session, onProfi
 
     return (
         <div className="flex flex-col flex-1">
-            <ProvablyFairModal show={isFairnessModalOpen} onClose={closeFairnessModal} />
-            <BettingHistory history={history} />
-            <MultiplierContext.Provider value={multiplier}>
-                <div className="w-full max-w-[1600px] mx-auto px-4 lg:px-6 py-4 lg:py-6 flex-1">
-                     <div className="grid grid-cols-1 lg:grid-cols-[340px,1fr] gap-6 h-full">
-                        <div className="min-h-0 order-first hidden lg:block">
-                            <PlayerBets bets={allBets} onOpenFairnessModal={openFairnessModal} />
-                        </div>
-                        <div ref={gameContainerRef} tabIndex={-1} className="flex flex-col min-w-0 outline-none">
-                            <GameDisplay 
-                                gameState={gameState}
-                                countdown={countdown}
-                                multiplier={multiplier}
-                                cashoutEvents={cashoutEvents}
-                            />
-                            <BettingControls 
-                                profile={profile}
-                                session={session}
-                                onPlaceBet={handlePlaceBet}
-                                gameState={gameState}
-                                loading={false}
-                                error={error}
-                                userBets={myBets}
-                            />
-                             <MyBets
-                                bets={myBets}
-                                onCashout={handleCashout}
-                                loadingBetId={loadingBetId}
-                                gameState={gameState}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </MultiplierContext.Provider>
+             {/* [TEMPORARY] Maintenance screen */}
+             <div className="flex flex-col items-center justify-center h-full text-center text-text-muted p-8">
+                <CrashIcon className="w-24 h-24 text-primary animate-pulse-glow" />
+                <h1 className="mt-8 text-4xl font-bold text-white">Repairing...</h1>
+                <p className="mt-2 max-w-md">The Crash game is currently undergoing maintenance to improve your experience. Please check back later.</p>
+            </div>
         </div>
     );
 };

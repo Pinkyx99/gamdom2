@@ -7,7 +7,58 @@ import { KenoGrid } from '../components/keno/KenoGrid';
 import { KenoPayoutBar } from '../components/keno/KenoPayoutBar';
 import { KenoSoundIcon, KenoSpeedIcon, KenoHistoryIcon, KenoHelpIcon, KenoFairnessIcon, KenoInfoIcon } from '../components/keno/KenoIcons';
 import { supabase } from '../lib/supabaseClient';
-import { Logo } from '../components/icons';
+// FIX: Add missing icon imports
+import { Logo, SoundIcon, LightningIcon, CalendarIcon, ClockIcon, CheckIcon, QuestionIcon } from '../components/icons';
+
+// --- Provably Fair Helper Functions ---
+async function sha256Hex(str: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function hexToUint32Array(hex: string): Uint32Array {
+    const u32s = new Uint32Array(8);
+    for (let i = 0; i < 8; i++) {
+        u32s[i] = parseInt(hex.substring(i * 8, (i + 1) * 8), 16);
+    }
+    return u32s;
+}
+function makeXorshift32(seedArray: Uint32Array) {
+    let state = [...seedArray];
+    return function() {
+        let t = state[0];
+        t ^= t << 11;
+        t ^= t >> 8;
+        state[0] = state[1];
+        state[1] = state[2];
+        state[2] = state[3];
+        t ^= state[3];
+        t ^= state[3] >> 19;
+        state[3] = t;
+        return (state[3] & 0xFFFFFFFF) / 0x100000000;
+    };
+}
+function seededShuffle<T>(arr: T[], rng: () => number): T[] {
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+const TopToolbar: React.FC = () => (
+    <div className="flex items-center space-x-1">
+        <button className="w-9 h-9 flex items-center justify-center bg-[#37b54a]/30 text-[#37b54a] rounded-md transition hover:bg-[#37b54a]/50"><SoundIcon className="w-5 h-5" /></button>
+        <button className="w-9 h-9 flex items-center justify-center bg-white/5 text-gray-400 rounded-md transition hover:bg-white/10"><LightningIcon className="w-5 h-5" /></button>
+        <button className="w-9 h-9 flex items-center justify-center bg-white/5 text-gray-400 rounded-md transition hover:bg-white/10"><CalendarIcon className="w-5 h-5" /></button>
+        <button className="w-9 h-9 flex items-center justify-center bg-white/5 text-gray-400 rounded-md transition hover:bg-white/10"><ClockIcon className="w-5 h-5" /></button>
+        <button className="w-9 h-9 flex items-center justify-center bg-white/5 text-gray-400 rounded-md transition hover:bg-white/10"><CheckIcon className="w-5 h-5" /></button>
+        <button className="w-9 h-9 flex items-center justify-center bg-white/5 text-gray-400 rounded-md transition hover:bg-white/10"><QuestionIcon className="w-5 h-5" /></button>
+    </div>
+);
 
 interface KenoGamePageProps {
     profile: Profile | null;
@@ -120,10 +171,11 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                 const { data: currentProfile, error: fetchError } = await supabase.from('profiles').select('balance').eq('id', session.user.id).single();
                 if (fetchError) throw fetchError;
                 if (!currentProfile) throw new Error("Could not find user profile to update balance.");
-                // FIX: Explicitly cast balance from Supabase query to a number before arithmetic operation to resolve 'unknown' type error.
+                // FIX: Argument of type 'unknown' is not assignable to parameter of type 'number'.
+                // Safely convert balance to a number.
                 const currentBalance = Number(currentProfile.balance) || 0;
-                const newBalance = currentBalance + payout;
                 
+                const newBalance = currentBalance + payout;
                 const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);
                 if (payoutError) throw payoutError;
 
@@ -180,9 +232,11 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                     riskLevel={riskLevel}
                     setRiskLevel={setRiskLevel}
                     gameState={gameState}
-                    // FIX: Pass the correct handler functions to the KenoControls component.
+                    // FIX: Cannot find name 'onPlay'. Did you mean 'onplay'?
                     onPlay={handlePlay}
+                    // FIX: Cannot find name 'onClear'.
                     onClear={handleClear}
+                    // FIX: Cannot find name 'onRandom'.
                     onRandom={handleRandom}
                     balance={profile?.balance ?? 0}
                     selectedCount={selectedNumbers.size}

@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 // Updated Logo to use the new image
@@ -29,13 +30,13 @@ export const ChallengesIcon: React.FC<{ className?: string }> = (props) => (
     </svg>
 );
 export const InstantPayoutIcon: React.FC<{ className?: string }> = (props) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
 );
 export const SocialCasinoIcon: React.FC<{ className?: string }> = (props) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197M15 21a6 6 0 006-6v-1a6 6 0 00-9-5.197"/></svg>
+    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197M15 21a6 6 0 006-6v-1a6 6 0 00-9-5.197"/></svg>
 );
 export const SportsIcon: React.FC<{ className?: string }> = (props) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 2L3 14h9l-1 8 11-12h-9l1-8z"/></svg>
+    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 2L3 14h9l-1 8 11-12h-9l1-8z"/></svg>
 );
 export const CustomerHelpIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -50,10 +51,10 @@ export const FaqIcon: React.FC<{ className?: string }> = (props) => (
     </svg>
 );
 export const SearchIcon: React.FC<{ className?: string }> = (props) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
 );
 export const ChevronDownIcon: React.FC<{ className?: string }> = (props) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
+    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
 );
 
 // Social Icons
@@ -115,7 +116,7 @@ export const PlinkoIcon: React.FC<{ className?: string }> = (props) => (
 );
 export const MinesIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M11.25,2C6.16,2,2,6.16,2,11.25S6.16,20.5,11.25,20.5,20.5,16.34,20.5,11.25,16.34,2,11.25,2Zm3.1,12.1a1,1,0,0,1-1.4,0L11,12.15,9.05,14.1a1,1,0,0,1-1.4-1.4L9.6,10.75,7.65,8.8a1,1,0,0,1,1.4-1.4L11,9.35l1.95-1.95a1,1,0,0,1,1.4,1.4L12.4,10.75Z"/>
+      <path d="M11.25,2C6.16,2,2,6.16,2,11.25S6.16,20.5,11.25,20.5,20.5,16.34,20.5,11.25,16.34,2,11.25,2Zm3.1,12.1a1,1,0,0,1-1.4,0L11,12.15,9.05,14.1a1,1,0,0,1-1.4-1.4L9.6,10.75,7.65,8.8a1,1,0,0,1,1.4-1.4L11,9.35,1.95-1.95a1,1,0,0,1,1.4,1.4L12.4,10.75Z"/>
       <path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5.66,13.06a1,1,0,0,1-1.41,0L14.83,13.6a3,3,0,0,0-4.24,0L9.17,15.06a1,1,0,0,1-1.41-1.41l1.42-1.42a3,3,0,0,0,0-4.24L7.76,6.57a1,1,0,0,1,1.41-1.41l1.42,1.42a3,3,0,0,0,4.24,0l1.42-1.42a1,1,0,0,1,1.41,1.41L16.24,8a3,3,0,0,0,0,4.24Z"/>
     </svg>
 );
@@ -135,14 +136,24 @@ export const BlackjackIcon: React.FC<{ className?: string }> = (props) => (
 export const SlotMachineIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
         <path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM4 19V5h16l.002 14H4z"></path>
-        <path d="M16 11h2v2h-2zM12 11h2v2h-2zM8 11h2v2H8zM6 7h12v2H6z"></path>
+        <path d="M9 10l-2 2 2 2 2-2-2-2zm4 0-2 2 2 2 2-2-2-2zm4 0-2 2 2 2 2-2-2-2zM6 7h12v2H6z"></path>
     </svg>
 );
 export const TrophyIcon: React.FC<{ className?: string }> = (props) => (
-    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z"></path></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19,4H17A2,2 0 0,0 15,2H9A2,2 0 0,0 7,4H5A2,2 0 0,0 3,6V11C3,13.21 4.79,15 7,15V19H9V15H15V19H17V15C19.21,15 21,13.21 21,11V6A2,2 0 0,0 19,4M9,4H15V6H9V4Z" />
+    </svg>
+);
+export const GiftIcon: React.FC<{ className?: string }> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12.75 16.5C12.75 17.3284 12.0784 18 11.25 18C10.4216 18 9.75 17.3284 9.75 16.5V13.5H12.75V16.5Z" />
+    <path fillRule="evenodd" d="M8.25 12V3.75A1.5 1.5 0 019.75 2.25h3A1.5 1.5 0 0114.25 3.75V12H18a3 3 0 013 3v1.5a3 3 0 01-3 3h-2.25V21a.75.75 0 01-1.5 0v-1.5H8.25V21a.75.75 0 01-1.5 0v-1.5H4.5a3 3 0 01-3-3V15a3 3 0 013-3h3.75Zm-1.5 1.5H3a1.5 1.5 0 00-1.5 1.5V15a1.5 1.5 0 001.5 1.5h1.5v-3Zm12 3v-3h1.5a1.5 1.5 0 011.5 1.5V15a1.5 1.5 0 01-1.5 1.5h-1.5Z" clipRule="evenodd" />
+  </svg>
 );
 export const UsdIcon: React.FC<{ className?: string }> = (props) => (
-    <div {...props} className={`w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm ${props.className}`}>$</div>
+    <div {...props} className={`bg-[#34A853] rounded-full flex items-center justify-center text-white font-bold ${props.className}`}>
+        <span className="text-sm leading-none select-none">$</span>
+    </div>
 );
 
 export const MutedSoundIcon: React.FC<{ className?: string }> = (props) => (
@@ -181,6 +192,13 @@ export const ChevronLeftIcon: React.FC<{ className?: string }> = (props) => (
     </svg>
 );
 
+// FIX: Added missing ChevronRightIcon component
+export const ChevronRightIcon: React.FC<{ className?: string }> = (props) => (
+    <svg {...props} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+    </svg>
+);
+
 export const LogoIcon: React.FC<{ className?: string }> = ({ className = "h-12" }) => (
     <img src="https://i.imgur.com/6U31UIH.png" alt="Mihael.bet Logo" className={className} />
 );
@@ -202,6 +220,13 @@ export const PlayCircleIcon: React.FC<{ className?: string }> = (props) => (
   </svg>
 );
 
+export const StarIcon: React.FC<{ className?: string, filled?: boolean }> = ({ className, filled }) => (
+    <svg {...{className}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+    </svg>
+);
+
+
 // --- START OF MINES GAME ICONS ---
 export const SoundIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>);
 export const LightningIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>);
@@ -214,3 +239,31 @@ export const FortressIcon: React.FC<{ className?: string }> = (props) => (<svg {
 export const GemIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 8.5L12 22L22 8.5L12 2Z" fill="currentColor"/><path d="M2 8.5L12 12L22 8.5" stroke="white" strokeOpacity="0.5" strokeWidth="0.5"/><path d="M12 22V12" stroke="white" strokeOpacity="0.5" strokeWidth="0.5"/></svg>);
 export const MineIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} viewBox="0 0 24 24" fill="currentColor"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" /><path d="M12,5a1,1,0,0,0-1,1v2a1,1,0,0,0,2,0V6A1,1,0,0,0,12,5Z" /><path d="M12,15a1,1,0,0,0-1,1v2a1,1,0,0,0,2,0V16A1,1,0,0,0,12,15Z" /><path d="M18,11H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" /><path d="M8,11H6a1,1,0,0,0,0,2H8a1,1,0,0,0,0-2Z" /><path d="M16.95,6.05a1,1,0,0,0-1.41,0l-1.42,1.42a1,1,0,0,0,1.41,1.41L17,7.46A1,1,0,0,0,16.95,6.05Z" /><path d="M8.46,15.54a1,1,0,0,0-1.41,0L5.64,16.95a1,1,0,0,0,1.41,1.41l1.41-1.41A1,1,0,0,0,8.46,15.54Z" /><path d="M16.95,16.95a1,1,0,0,0,0-1.41L15.54,14.13a1,1,0,0,0-1.41,1.41l1.41,1.41A1,1,0,0,0,16.95,16.95Z" /><path d="M8.46,7.46A1,1,0,0,0,7.05,6.05L5.64,7.46A1,1,0,0,0,7.05,8.87l1.41-1.41Z" /></svg>);
 // --- END OF MINES GAME ICONS ---
+
+// --- ADMIN PANEL ICONS ---
+export const ShieldExclamationIcon: React.FC<{ className?: string }> = (props) => (
+  <svg {...props} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008h-.008v-.008z" />
+  </svg>
+);
+export const Squares2X2Icon: React.FC<{ className?: string }> = (props) => (
+  <svg {...props} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 8.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6A2.25 2.25 0 0115.75 3.75h2.25A2.25 2.25 0 0120.25 6v2.25a2.25 2.25 0 01-2.25 2.25h-2.25A2.25 2.25 0 0113.5 8.25V6zM13.5 15.75A2.25 2.25 0 0115.75 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z" />
+  </svg>
+);
+export const CurrencyDollarIcon: React.FC<{ className?: string }> = (props) => (
+    <svg {...props} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+);
+export const MegaphoneIcon: React.FC<{ className?: string }> = (props) => (
+    <svg {...props} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 100 15h8.05a1.5 1.5 0 00.975-2.635l-4.12-3.431A.75.75 0 0115.07 15H15V9.312a.75.75 0 01.99-1.63l1.83.61a.75.75 0 00.93-.93L16.29 4.5a.75.75 0 00-1.22.463l-.44 2.86a.75.75 0 01-1.44-.22z" />
+    </svg>
+);
+export const ClipboardDocumentListIcon: React.FC<{ className?: string }> = (props) => (
+    <svg {...props} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+);
+// --- END OF ADMIN PANEL ICONS ---

@@ -1,4 +1,6 @@
 // Defines the wager thresholds and calculation logic for the player leveling system.
+import { ROYALTY_RANKS } from '../constants';
+import { RoyaltyRank } from '../types';
 
 // Cumulative wager amounts required to reach each level. Index represents the level.
 // LEVEL_THRESHOLDS[1] is the wager required to reach level 1.
@@ -63,4 +65,19 @@ export const calculateLevelInfo = (wagered: number) => {
         currentLevelWager,
         nextLevelWager
     };
+};
+
+/**
+ * Gets the highest rank a user has achieved based on their level.
+ * @param level The user's current level.
+ * @returns The corresponding RoyaltyRank object or null if no rank is achieved.
+ */
+export const getRankForLevel = (level: number): RoyaltyRank | null => {
+    // Ranks are sorted by requirement, so iterate backwards to find the highest achieved rank
+    for (let i = ROYALTY_RANKS.length - 1; i >= 0; i--) {
+        if (level >= ROYALTY_RANKS[i].levelRequirement) {
+            return ROYALTY_RANKS[i];
+        }
+    }
+    return null;
 };

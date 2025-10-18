@@ -191,49 +191,24 @@ const BlackjackGamePage: React.FC<BlackjackGamePageProps> = ({ profile, session,
      }
   };
 
-  // Dealer's turn logic with "scamy" advantage
+  // Dealer's turn logic (standard rules, no advantage)
   useEffect(() => {
     if (gameState === 'dealer_turn') {
       const dealerTurnAction = () => {
         const currentDealerScore = calculateHandValue(dealerHand);
 
         if (currentDealerScore < 17) {
-          let newDeck = [...deck];
+          const newDeck = [...deck];
           if (newDeck.length === 0) {
             setGameState('finished');
             return;
           }
-
-          let cardToDraw: Card;
-          let cardIndexInDeck = newDeck.length - 1; // Default to top card
-
-          // "Scamy" logic: 40% chance to pick the best card for a house edge.
-          if (Math.random() < 0.40) {
-            let bestCardFromDeck: Card | null = null;
-            let bestScore = -1;
-            let bestCardIndex = -1;
-
-            // Find the best card in the deck that won't bust the dealer
-            for (let i = 0; i < newDeck.length; i++) {
-              const potentialScore = calculateHandValue([...dealerHand, newDeck[i]]);
-              if (potentialScore > bestScore && potentialScore <= 21) {
-                bestScore = potentialScore;
-                bestCardFromDeck = newDeck[i];
-                bestCardIndex = i;
-              }
-            }
-            
-            if (bestCardFromDeck && bestCardIndex !== -1) {
-                cardIndexInDeck = bestCardIndex;
-            }
-          }
           
-          cardToDraw = newDeck.splice(cardIndexInDeck, 1)[0];
-
+          const cardToDraw = newDeck.pop()!;
           const newHand = [...dealerHand, cardToDraw];
+          
           setDealerHand(newHand);
           setDeck(newDeck);
-
         } else {
           setGameState('finished');
         }
@@ -322,7 +297,6 @@ const BlackjackGamePage: React.FC<BlackjackGamePageProps> = ({ profile, session,
   
         // Wait for animations/user to see result, then reset for next round.
         resetTimer = window.setTimeout(() => {
-          setBetAmount(0.10); // Reset bet for next round to default
           resetGame();
         }, 4000);
     };
@@ -351,6 +325,7 @@ const BlackjackGamePage: React.FC<BlackjackGamePageProps> = ({ profile, session,
           onStand={handleStand}
           onDouble={handleDouble}
           canDouble={playerHand.length === 2 && (profile?.balance ?? 0) >= betAmount}
+          balance={profile?.balance ?? 0}
         />
         <div className="relative rounded-lg flex flex-col justify-between items-center p-8">
             

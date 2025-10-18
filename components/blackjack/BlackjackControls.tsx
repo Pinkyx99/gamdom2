@@ -12,10 +12,11 @@ interface BlackjackControlsProps {
     onStand: () => void;
     onDouble: () => void;
     canDouble: boolean;
+    balance: number;
 }
 
 export const BlackjackControls: React.FC<BlackjackControlsProps> = ({
-    gameState, betAmount, setBetAmount, onBet, onHit, onStand, onDouble, canDouble
+    gameState, betAmount, setBetAmount, onBet, onHit, onStand, onDouble, canDouble, balance
 }) => {
     
     const handleBetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,11 +24,13 @@ export const BlackjackControls: React.FC<BlackjackControlsProps> = ({
         if (val >= 0) setBetAmount(val);
     };
 
-    const handleBetModifier = (modifier: '1/2' | 'x2') => {
+    const handleBetModifier = (modifier: '1/2' | 'x2' | 'max') => {
         if (modifier === '1/2') {
             setBetAmount(Math.max(0.01, parseFloat((betAmount / 2).toFixed(2))));
-        } else {
+        } else if (modifier === 'x2') {
             setBetAmount(parseFloat((betAmount * 2).toFixed(2)));
+        } else if (modifier === 'max') {
+            setBetAmount(balance);
         }
     };
     
@@ -61,6 +64,7 @@ export const BlackjackControls: React.FC<BlackjackControlsProps> = ({
                     <div className="flex space-x-1">
                         <button onClick={() => handleBetModifier('1/2')} disabled={!isBetting} className="px-3 py-1 text-xs font-bold text-gray-300 rounded bg-gray-700/50 hover:bg-white/10 disabled:opacity-50">½</button>
                         <button onClick={() => handleBetModifier('x2')} disabled={!isBetting} className="px-3 py-1 text-xs font-bold text-gray-300 rounded bg-gray-700/50 hover:bg-white/10 disabled:opacity-50">2x</button>
+                        <button onClick={() => handleBetModifier('max')} disabled={!isBetting} className="px-3 py-1 text-xs font-bold text-gray-300 rounded bg-gray-700/50 hover:bg-white/10 disabled:opacity-50">Max</button>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,8 @@
 import React, { useRef, useCallback, useEffect, useState } from 'react';
-import { RollResult } from '../../pages/DiceGamePage';
+// FIX: Update import path for RollResult type
+import { RollResult } from '../../types';
 
-interface DiceSliderProps {
+interface DiceDisplayProps {
     rollValue: number;
     isRollOver: boolean;
     gameState: 'idle' | 'rolling' | 'finished';
@@ -10,46 +11,27 @@ interface DiceSliderProps {
     previousRollValue: number;
 }
 
-const ResultIndicator: React.FC<{ result: RollResult, previousValue: number }> = ({ result, previousValue }) => {
-    const [position, setPosition] = useState(previousValue);
+// FIX: Add lastRoll to props to fix compilation error.
+const Needle: React.FC<{ angle: number, isRolling: boolean, lastRoll: RollResult | null }> = ({ angle, isRolling, lastRoll }) => (
+    <div 
+        className="absolute bottom-0 left-1/2 w-1 h-1/2 origin-bottom transition-transform duration-300 ease-out"
+        style={{ transform: `translateX(-50%) rotate(${angle}deg)` }}
+    >
+        <div className={`w-full h-full rounded-t-full ${isRolling ? 'bg-white' : (lastRoll?.win ? 'bg-accent-green' : 'bg-red-500')}`}></div>
+    </div>
+);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setPosition(result.value);
-        }, 50);
-        return () => clearTimeout(timer);
-    }, [result.value]);
 
-    const leftPosition = `clamp(16px, ${position}%, calc(100% - 16px))`;
-
-    return (
-        <div
-            className="absolute top-1/2 pointer-events-none"
-            style={{
-                left: leftPosition,
-                zIndex: 15,
-                transition: 'left 1.2s cubic-bezier(0.25, 1, 0.5, 1)',
-                willChange: 'left',
-            }}
-        >
-            <div className="relative -translate-x-1/2 -translate-y-1/2">
-                <div className={`w-0.5 h-14 ${result.win ? 'bg-accent-green' : 'bg-red-500'}`} />
-                <div
-                    className={`absolute -top-5 left-1/2 -translate-x-1/2 rounded-md px-2 py-0.5 text-sm font-bold text-white shadow-lg ${result.win ? 'bg-accent-green' : 'bg-red-500'}`}
-                >
-                    {result.value.toFixed(2)}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export const DiceDial: React.FC<DiceSliderProps> = ({ rollValue, isRollOver, gameState, lastRoll, onRollValueChange, previousRollValue }) => {
-    const sliderRef = useRef<HTMLDivElement>(null);
+export const DiceDisplay: React.FC<DiceDisplayProps> = ({ rollValue, isRollOver, gameState, lastRoll, onRollValueChange, previousRollValue }) => {
+    const dialRef = useRef<HTMLDivElement>(null);
     const numberDisplayRef = useRef<HTMLDivElement>(null);
     const animationFrameRef = useRef<number>();
+    
+    // State for needle animation
+    const [startAngle, setStartAngle] = useState((previousRollValue / 100) * 180 - 90);
+    const [finalAngle, setFinalAngle] = useState((previousRollValue / 100) * 180 - 90);
 
-    // Number animation during rolling
+    // Number ticker animation
     useEffect(() => {
         const animate = () => {
             if (numberDisplayRef.current) {
@@ -69,14 +51,29 @@ export const DiceDial: React.FC<DiceSliderProps> = ({ rollValue, isRollOver, gam
         };
     }, [gameState]);
 
+    // Needle animation logic
+    useEffect(() => {
+        if (gameState === 'rolling') {
+            setStartAngle(finalAngle); // Start from where the last roll ended
+        }
+        if (gameState === 'finished' && lastRoll) {
+            setFinalAngle((lastRoll.value / 100) * 180 - 90);
+        }
+    }, [gameState, lastRoll, finalAngle]);
 
-    // Dragging logic
+
     const handlePointerMove = useCallback((event: PointerEvent) => {
-        if (!sliderRef.current) return;
-        const rect = sliderRef.current.getBoundingClientRect();
-        const position = event.clientX - rect.left;
-        const percentage = Math.max(0, Math.min(100, (position / rect.width) * 100));
-        onRollValueChange(percentage);
+        if (!dialRef.current) return;
+        const rect = dialRef.current.getBoundingClientRect();
+        const x = event.clientX - rect.left - rect.width / 2;
+        const y = event.clientY - rect.top - rect.height; // Origin is bottom-center
+        
+        let angle = Math.atan2(y, x) * (180 / Math.PI) + 90;
+        if (angle < 0) angle += 360;
+        angle = Math.max(0, Math.min(180, angle));
+
+        onRollValueChange((angle / 180) * 100);
+
     }, [onRollValueChange]);
 
     const handlePointerUp = useCallback(() => {
@@ -85,92 +82,109 @@ export const DiceDial: React.FC<DiceSliderProps> = ({ rollValue, isRollOver, gam
         window.removeEventListener('pointerup', handlePointerUp);
     }, [handlePointerMove]);
 
-    useEffect(() => {
-        return () => {
-            window.removeEventListener('pointermove', handlePointerMove);
-            window.removeEventListener('pointerup', handlePointerUp);
-        };
-    }, [handlePointerMove, handlePointerUp]);
-
     const handlePointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
-        if (gameState !== 'idle' || !sliderRef.current) return;
+        if (gameState !== 'idle' || !dialRef.current) return;
         document.body.style.cursor = 'grabbing';
-        const rect = sliderRef.current.getBoundingClientRect();
-        const position = event.clientX - rect.left;
-        const percentage = Math.max(0, Math.min(100, (position / rect.width) * 100));
-        onRollValueChange(percentage);
+        
+        // Directly calculate and apply the value on first click
+        const rect = dialRef.current.getBoundingClientRect();
+        const x = event.clientX - rect.left - rect.width / 2;
+        const y = event.clientY - rect.top - rect.height;
+        let angle = Math.atan2(y, x) * (180 / Math.PI) + 90;
+        if (angle < 0) angle += 360;
+        angle = Math.max(0, Math.min(180, angle));
+        onRollValueChange((angle / 180) * 100);
+
         window.addEventListener('pointermove', handlePointerMove);
         window.addEventListener('pointerup', handlePointerUp);
     }, [gameState, handlePointerMove, handlePointerUp, onRollValueChange]);
 
-    const sliderPercentage = rollValue;
+    const winPercentage = isRollOver ? 100 - rollValue : rollValue;
+
+    const conicGradient = isRollOver
+        ? `conic-gradient(from -90deg at 50% 100%, #16a34a 0%, #16a34a ${winPercentage}%, #ef4444 ${winPercentage}%, #ef4444 100%)`
+        : `conic-gradient(from -90deg at 50% 100%, #16a34a 0%, #16a34a ${winPercentage}%, #ef4444 ${winPercentage}%, #ef4444 100%)`;
+
 
     return (
         <div className="flex-1 flex flex-col items-center justify-center p-4 relative min-h-[350px] overflow-hidden">
-            <div
-                className="w-full max-w-2xl relative z-10 flex flex-col items-center justify-center"
-                onPointerDown={handlePointerDown}
-            >
-                {/* Main Result Display */}
-                <div className="h-28 flex items-center justify-center">
-                    {gameState === 'idle' && (
-                        <div className={`font-mono font-bold text-7xl tabular-nums text-text-muted transition-opacity duration-300 ${lastRoll ? 'opacity-0' : 'opacity-100'}`}>
-                            0.00
-                        </div>
-                    )}
-                    {gameState === 'rolling' && (
-                        <div ref={numberDisplayRef} className="font-mono font-bold text-7xl text-white tabular-nums">
-                            0.00
-                        </div>
-                    )}
-                    <div className={`font-mono font-bold text-7xl tabular-nums transition-all duration-300 transform ${gameState === 'finished' && lastRoll ? 'scale-100 opacity-100' : 'scale-75 opacity-0'} ${lastRoll?.win ? 'text-accent-green' : 'text-red-500'}`}
-                         style={{ textShadow: lastRoll?.win ? '0 0 20px rgba(100, 255, 218, 0.4)' : '0 0 20px rgba(239, 68, 68, 0.4)' }}>
-                        {lastRoll?.value.toFixed(2)}
-                    </div>
-                </div>
-
-                {/* Slider */}
-                <div className="relative w-full h-12 flex items-center mt-8">
-                    {lastRoll && gameState !== 'rolling' && <ResultIndicator result={lastRoll} previousValue={previousRollValue} />}
-
-                    <div
-                        ref={sliderRef}
-                        className={`relative w-full h-4 rounded-full bg-red-500/20 border-2 border-red-500/30 ${gameState === 'idle' ? 'cursor-grabbing' : 'cursor-default'}`}
-                        role="slider"
-                        aria-valuenow={rollValue}
-                    >
-                        <div
-                            className="absolute top-0 h-full bg-accent-green/20 border-2 border-accent-green/30"
-                            style={isRollOver ?
-                                { left: `${sliderPercentage}%`, right: '-2px', borderRadius: '0 99px 99px 0' } :
-                                { left: '-2px', width: `${sliderPercentage}%`, borderRadius: '99px 0 0 99px' }
-                            }
-                        ></div>
-                    </div>
-
-                    <div
-                        className="absolute top-1/2 pointer-events-none"
-                        style={{ left: `clamp(8px, ${sliderPercentage}%, calc(100% - 8px))`, zIndex: 10 }}
-                    >
-                        <div className="relative -translate-x-1/2 -translate-y-1/2">
-                            <div className="w-1 h-8 bg-white rounded-full shadow-lg" />
-                            <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 px-2 py-1 bg-[#081018] rounded-md text-white font-semibold text-sm shadow-md border border-outline">
-                                {rollValue.toFixed(2)}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Ticks */}
-                <div className="relative w-full text-xs text-text-muted mt-2 px-1 h-4">
+            <div className="w-full max-w-lg aspect-[2/1] relative">
+                <div 
+                    ref={dialRef}
+                    className="absolute inset-0 cursor-grab active:cursor-grabbing"
+                    onPointerDown={handlePointerDown}
+                    style={{
+                        '--start-angle': `${startAngle}deg`,
+                        '--final-angle': `${finalAngle}deg`,
+                    } as React.CSSProperties}
+                >
+                    {/* Dial Background */}
+                    <div className="w-full h-full rounded-t-full bg-gradient-to-b from-[#0f1519] to-[#1a2127] border-b-2 border-white/10" style={{
+                        clipPath: 'path("M 0 100 A 100 100 0 0 1 200 100 L 200 200 L 0 200 Z")',
+                        transform: 'scale(2)',
+                        transformOrigin: 'bottom'
+                    }}/>
+                    {/* Color Arc */}
+                    <div 
+                        className="absolute inset-0 rounded-t-full transition-all duration-200"
+                        style={{ background: conicGradient, mask: 'radial-gradient(transparent 65%, black 66%)' }}
+                    />
+                    
+                    {/* Ticks */}
                     {[0, 25, 50, 75, 100].map(val => (
-                        <div key={val} className="absolute -translate-x-1/2" style={{ left: `${val}%`}}>
-                           <div className="w-0.5 h-1.5 bg-text-muted/50" />
-                           <span className="absolute top-2 left-1/2 -translate-x-1/2">{val}</span>
+                        <div key={val} className="absolute bottom-0 left-1/2 w-px h-1/2 origin-bottom text-text-muted" style={{ transform: `translateX(-50%) rotate(${(val/100)*180 - 90}deg)`}}>
+                           <div className="w-px h-2 bg-text-muted/50"></div>
+                           <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs" style={{transform: `translateX(-50%) rotate(${90 - (val/100)*180}deg)`}}>{val}</span>
                         </div>
                     ))}
+
+                    {/* Needle */}
+                    <div className={`absolute bottom-0 left-1/2 w-1 h-1/2 origin-bottom needle ${gameState}`}>
+                        <div className={`w-full h-full rounded-t-full needle-body ${lastRoll?.win ? 'win' : 'loss'}`}></div>
+                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#081018] border-2 border-white/50"></div>
+                    </div>
                 </div>
             </div>
+
+            {/* Central Display */}
+            <div className="absolute bottom-1/2 translate-y-[40%] text-center pointer-events-none">
+                <div className="flex items-center justify-center transition-opacity" style={{ opacity: gameState === 'idle' ? 1 : 0}}>
+                     <span className={`font-bold text-lg ${isRollOver ? 'text-accent-green' : 'text-red-500'}`}>{isRollOver ? 'Over' : 'Under'}</span>
+                     <span className="font-bold text-4xl text-white mx-2">{rollValue.toFixed(2)}</span>
+                </div>
+                
+                 {/* Rolling Ticker */}
+                 <div ref={numberDisplayRef} className={`absolute inset-0 font-mono font-bold text-6xl text-white tabular-nums transition-opacity ${gameState === 'rolling' ? 'opacity-100' : 'opacity-0'}`}>
+                    0.00
+                </div>
+
+                {/* Final Result */}
+                 <div className={`absolute inset-0 font-mono font-bold text-6xl tabular-nums transition-all duration-300 transform ${gameState === 'finished' && lastRoll ? 'scale-100 opacity-100' : 'scale-75 opacity-0'} ${lastRoll?.win ? 'text-accent-green' : 'text-red-500'}`}
+                     style={{ textShadow: lastRoll?.win ? '0 0 20px rgba(100, 255, 218, 0.4)' : '0 0 20px rgba(239, 68, 68, 0.4)' }}>
+                    {lastRoll?.value.toFixed(2)}
+                </div>
+            </div>
+
+            <style>{`
+                @keyframes spin {
+                    0% { transform: translateX(-50%) rotate(var(--start-angle)); }
+                    100% { transform: translateX(-50%) rotate(calc(var(--start-angle) + 360deg)); }
+                }
+                .needle.rolling {
+                    animation: spin 0.5s linear infinite;
+                }
+                .needle.finished {
+                    transform: translateX(-50%) rotate(var(--final-angle));
+                    transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+                }
+                .needle.idle {
+                     transform: translateX(-50%) rotate(${ (rollValue / 100) * 180 - 90 }deg);
+                     transition: transform 0.2s ease-out;
+                }
+                .needle-body { background-color: white; }
+                .needle-body.win { background-color: #64ffda; }
+                .needle-body.loss { background-color: #ef4444; }
+            `}</style>
         </div>
     );
 };

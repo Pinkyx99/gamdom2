@@ -66,7 +66,7 @@ export const OriginalsRow: React.FC<{ onGameSelect: (name: string) => void }> = 
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-white">Punt Originals</h2>
+                <h2 className="text-2xl font-bold text-white">Mihael Originals</h2>
                 <button className="text-sm font-semibold text-primary hover:text-primary-light">View All</button>
             </div>
             <div className="relative group">

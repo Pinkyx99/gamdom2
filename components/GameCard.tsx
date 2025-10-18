@@ -13,7 +13,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay, isLoading }) =
             className="group relative rounded-xl overflow-hidden cursor-pointer transition-transform duration-300 hover:-translate-y-1.5 aspect-[3/4]"
             onClick={() => onPlay && !isLoading && onPlay(game)}
         >
-            <img src={game.image} alt={game.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <img src={game.image} alt={game.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-4">
                 <h3 className="text-white font-bold text-lg">{game.name}</h3>
                 <p className="text-sm text-text-muted">{game.provider}</p>

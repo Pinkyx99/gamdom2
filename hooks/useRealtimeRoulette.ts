@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { RouletteRound, RouletteBet, RouletteColor, RouletteGameState, RouletteHistoryItem } from '../types';
@@ -180,10 +179,25 @@ export const useRealtimeRoulette = (session: Session | null, onProfileUpdate: ()
         }
         
         if (session) {
-            const { error: rpcError } = await supabase.rpc('increment_games_played', { p_user_id: session.user.id });
-            if (rpcError) {
-                // This is a non-critical error, so we just log it and don't block the user.
-                console.error("Error incrementing games_played for Roulette:", rpcError.message);
+             // Fetch the user's current wagered amount for a safer update
+            const { data: profileData, error: profileError } = await supabase
+                .from('profiles')
+                .select('wagered')
+                .eq('id', session.user.id)
+                .single();
+            
+            if (profileError) {
+                console.error("Could not fetch profile to update stats:", profileError.message);
+            } else {
+                const newWagered = (profileData.wagered || 0) + betAmount;
+                // Update wagered amount
+                await supabase.from('profiles').update({ wagered: newWagered }).eq('id', session.user.id);
+            }
+
+            // Increment games played
+            const { error: gamesPlayedError } = await supabase.rpc('increment_games_played', { p_user_id: session.user.id });
+            if (gamesPlayedError) {
+                console.error("Error incrementing games_played for Roulette:", gamesPlayedError.message);
             }
         }
 
