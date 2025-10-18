@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Profile } from '../types';
 // FIX: Import `Session` type from '@supabase/supabase-js' instead of '../types' to resolve module export error.
@@ -94,8 +95,9 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                 .from('profiles')
                 .update({
                     // FIX: Safely convert profile properties to numbers before arithmetic operations.
-                    balance: (Number(profile.balance) || 0) - betAmount,
-                    wagered: (Number(profile.wagered) || 0) + betAmount,
+                    // Cast to 'any' to handle potential 'unknown' type from Supabase.
+                    balance: (Number(profile.balance as any) || 0) - betAmount,
+                    wagered: (Number(profile.wagered as any) || 0) + betAmount,
                 })
                 .eq('id', session.user.id);
             if (debitError) throw debitError;
@@ -128,6 +130,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                 }
 
                 // FIX: The error on line 117 was a red herring. The actual error is that `currentProfile.balance` is of type `unknown` from Supabase and must be cast to `any` before being passed to `Number()`.
+                // FIX: Cast `currentProfile.balance` to `any` to resolve the 'unknown' type error.
                 const newBalance = (Number(currentProfile.balance as any) || 0) + payout;
                 
                 const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);

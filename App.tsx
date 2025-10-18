@@ -18,8 +18,10 @@ import { TipUserModal } from './components/TipUserModal';
 import { UserProfileModal } from './components/UserProfileModal';
 import { CogIcon } from './components/icons';
 import { Sidebar } from './components/Sidebar';
+import { PROFILE_LINKS } from './constants';
+import RouletteInfoPage from './pages/RouletteInfoPage';
 
-type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | ProfileLink['name'];
+type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | 'roulette-info' | ProfileLink['name'];
 
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -32,6 +34,61 @@ const App: React.FC = () => {
   const [tipRecipient, setTipRecipient] = useState<{ id: string; username: string } | null>(null);
   const [viewingProfileId, setViewingProfileId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const navigateTo = useCallback((view: View) => {
+    const path = view === 'home' ? '/' : `/${view.toLowerCase().replace(' ', '-')}`;
+    if (window.location.pathname !== path) {
+        window.history.pushState({ view }, '', path);
+    }
+    setCurrentView(view);
+  }, []);
+  
+  useEffect(() => {
+    const path = window.location.pathname.substring(1).toLowerCase();
+    const validGameViews = ['crash', 'mines', 'roulette', 'dice', 'roulette-info'];
+    const validProfileViews = PROFILE_LINKS.map(l => l.name.toLowerCase().replace(' ', '-'));
+    
+    let initialView: View = 'home';
+    if (path === '') {
+        initialView = 'home';
+    } else if (validGameViews.includes(path)) {
+        initialView = path as View;
+    } else if (validProfileViews.includes(path)) {
+        const profileView = PROFILE_LINKS.find(link => link.name.toLowerCase().replace(' ', '-') === path);
+        if (profileView) {
+            initialView = profileView.name;
+        }
+    }
+    setCurrentView(initialView);
+
+    const handlePopState = (event: PopStateEvent) => {
+      // If state is present, use it
+      if (event.state && event.state.view) {
+        setCurrentView(event.state.view);
+        return;
+      }
+      
+      // Fallback for direct URL navigation or states not pushed by our app
+      const popPath = window.location.pathname.substring(1).toLowerCase();
+      let popView: View = 'home';
+      if (popPath === '') {
+          popView = 'home';
+      } else if (validGameViews.includes(popPath)) {
+          popView = popPath as View;
+      } else if (validProfileViews.includes(popPath)) {
+          const profileView = PROFILE_LINKS.find(link => link.name.toLowerCase().replace(' ', '-') === popPath);
+          if (profileView) {
+              popView = profileView.name;
+          }
+      }
+      setCurrentView(popView);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
 
   const getProfile = useCallback(async (session: Session) => {
     try {
@@ -68,12 +125,12 @@ const App: React.FC = () => {
         getProfile(session);
       } else {
         setProfile(null);
-        setCurrentView('home');
+        navigateTo('home');
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [getProfile]);
+  }, [getProfile, navigateTo]);
 
   const openAuthModal = (view: 'signIn' | 'signUp') => {
     setAuthView(view);
@@ -84,7 +141,7 @@ const App: React.FC = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: 'https://gamdom2.vercel.app/',
+        redirectTo: 'https://gamdom2.vercel.app',
         queryParams: {
           prompt: 'select_account',
         },
@@ -103,7 +160,7 @@ const App: React.FC = () => {
   const handleGameSelect = (gameName: string) => {
     const game = gameName.toLowerCase();
     if (game === 'crash' || game === 'mines' || game === 'roulette' || game === 'dice') {
-      setCurrentView(game as View);
+      navigateTo(game as View);
     }
   };
   
@@ -112,6 +169,7 @@ const App: React.FC = () => {
         case 'crash': return 'bg-[#0F1923]';
         case 'mines': return 'bg-background';
         case 'roulette': return 'bg-[#0D1316]';
+        case 'roulette-info': return 'bg-[#0D1316]';
         case 'dice': return 'bg-[#081018]';
         default: return 'bg-background';
     }
@@ -142,8 +200,10 @@ const App: React.FC = () => {
                     profile={profile}
                     session={session}
                     onProfileUpdate={handleProfileUpdate}
-                    onNavigate={() => {}}
+                    onNavigate={navigateTo}
                 />;
+      case 'roulette-info':
+        return <RouletteInfoPage onNavigate={navigateTo} />;
       case 'dice':
         return <DiceGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
       default: // Profile pages
@@ -152,7 +212,7 @@ const App: React.FC = () => {
                 profile={profile}
                 onProfileUpdate={handleProfileUpdate}
                 activePage={currentView}
-                setActivePage={(page) => setCurrentView(page)}
+                setActivePage={navigateTo}
             />
         );
     }
@@ -183,7 +243,7 @@ const App: React.FC = () => {
           <Sidebar
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
-            onNavigate={(page) => setCurrentView(page as View)}
+            onNavigate={(page) => navigateTo(page as View)}
             currentView={currentView}
           />
           <div className="flex-1 min-w-0 flex flex-col">
@@ -193,7 +253,7 @@ const App: React.FC = () => {
                 onSignInClick={() => openAuthModal('signIn')}
                 onSignUpClick={() => openAuthModal('signUp')}
                 onWalletButtonClick={() => setIsWalletModalOpen(true)}
-                onNavigate={(page) => setCurrentView(page as View)}
+                onNavigate={(page) => navigateTo(page as View)}
                 currentView={currentView}
                 onChatToggle={() => setIsChatOpen(true)}
                 onProfileUpdate={handleProfileUpdate}
