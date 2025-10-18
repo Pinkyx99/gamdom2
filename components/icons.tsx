@@ -86,7 +86,23 @@ export const ChartBarIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
 );
 export const DiceIcon: React.FC<{ className?: string }> = (props) => (
-    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-14L4 7v10l8 4m0-14v10"></path></svg>
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        {/* Back die */}
+        <g transform="rotate(-15 12 12) translate(-2 -1) scale(0.9)">
+            <rect x="5" y="5" width="14" height="14" rx="2" fill="currentColor" opacity="0.6"/>
+            <circle cx="8.5" cy="8.5" r="1.5" fill="white" style={{mixBlendMode: 'difference'}} />
+            <circle cx="15.5" cy="15.5" r="1.5" fill="white" style={{mixBlendMode: 'difference'}} />
+        </g>
+        {/* Front die */}
+        <g transform="rotate(15 12 12) translate(2 1) scale(0.9)">
+            <rect x="5" y="5" width="14" height="14" rx="2" fill="currentColor"/>
+            <circle cx="8.5" cy="8.5" r="1.5" fill="white" style={{mixBlendMode: 'difference'}}/>
+            <circle cx="8.5" cy="15.5" r="1.5" fill="white" style={{mixBlendMode: 'difference'}}/>
+            <circle cx="15.5" cy="8.5" r="1.5" fill="white" style={{mixBlendMode: 'difference'}}/>
+            <circle cx="15.5" cy="15.5" r="1.5" fill="white" style={{mixBlendMode: 'difference'}}/>
+            <circle cx="12" cy="12" r="1.5" fill="white" style={{mixBlendMode: 'difference'}}/>
+        </g>
+    </svg>
 );
 export const CrashIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
@@ -99,7 +115,27 @@ export const PlinkoIcon: React.FC<{ className?: string }> = (props) => (
 );
 export const MinesIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12.003 2.003a2.46 2.46 0 0 1 2.13 1.22l6.93 11.998a2.46 2.46 0 0 1 0 2.44l-6.93 11.998a2.46 2.46 0 0 1-4.26 0l-6.93-11.998a2.46 2.46 0 0 1 0-2.44l6.93-11.998a2.46 2.46 0 0 1 2.13-1.22z"/>
+      <path d="M11.25,2C6.16,2,2,6.16,2,11.25S6.16,20.5,11.25,20.5,20.5,16.34,20.5,11.25,16.34,2,11.25,2Zm3.1,12.1a1,1,0,0,1-1.4,0L11,12.15,9.05,14.1a1,1,0,0,1-1.4-1.4L9.6,10.75,7.65,8.8a1,1,0,0,1,1.4-1.4L11,9.35l1.95-1.95a1,1,0,0,1,1.4,1.4L12.4,10.75Z"/>
+      <path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5.66,13.06a1,1,0,0,1-1.41,0L14.83,13.6a3,3,0,0,0-4.24,0L9.17,15.06a1,1,0,0,1-1.41-1.41l1.42-1.42a3,3,0,0,0,0-4.24L7.76,6.57a1,1,0,0,1,1.41-1.41l1.42,1.42a3,3,0,0,0,4.24,0l1.42-1.42a1,1,0,0,1,1.41,1.41L16.24,8a3,3,0,0,0,0,4.24Z"/>
+    </svg>
+);
+export const BlackjackIcon: React.FC<{ className?: string }> = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        {/* Back card */}
+        <g transform="rotate(-12 12 12) translate(-1, 0)">
+            <path d="M5 4C3.89543 4 3 4.89543 3 6V18C3 19.1046 3.89543 20 5 20H15C16.1046 20 17 19.1046 17 18V6C17 4.89543 16.1046 4 15 4H5Z" opacity="0.6"/>
+        </g>
+        {/* Front card (Ace) */}
+        <g transform="rotate(12 12 12) translate(1, 0)">
+            <path d="M7 2C5.89543 2 5 2.89543 5 4V16C5 17.1046 5.89543 18 7 18H17C18.1046 18 19 17.1046 19 16V4C19 2.89543 18.1046 2 17 2H7Z"/>
+            <text x="6.5" y="6.5" fontFamily="Inter, sans-serif" fontSize="4" fontWeight="bold" fill="white" style={{mixBlendMode: 'difference'}}>A</text>
+        </g>
+    </svg>
+);
+export const SlotMachineIcon: React.FC<{ className?: string }> = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM4 19V5h16l.002 14H4z"></path>
+        <path d="M16 11h2v2h-2zM12 11h2v2h-2zM8 11h2v2H8zM6 7h12v2H6z"></path>
     </svg>
 );
 export const TrophyIcon: React.FC<{ className?: string }> = (props) => (
@@ -128,7 +164,7 @@ export const LockIcon: React.FC<{ className?: string }> = (props) => (
 
 export const UserCircleIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>);
 export const ArrowsRightLeftIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 12L3 8m4 4l4-4m6 12v-4m0 4l4-4m-4 4l-4-4" /></svg>);
-export const CogIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>);
+export const CogIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066 2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>);
 export const UsersIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>);
 export const ShieldCheckIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 20.944a11.955 11.955 0 019-2.611m8.618-3.04A12.02 12.02 0 0121 20.944a11.955 11.955 0 01-9-17.611z" /></svg>);
 export const ArrowRightOnRectangleIcon: React.FC<{ className?: string }> = (props) => (<svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>);
@@ -151,6 +187,19 @@ export const LogoIcon: React.FC<{ className?: string }> = ({ className = "h-12" 
 
 export const ChatBubbleIcon: React.FC<{ className?: string }> = (props) => (
     <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+);
+
+export const FaceSmileIcon: React.FC<{ className?: string }> = (props) => (
+    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+);
+
+export const PlayCircleIcon: React.FC<{ className?: string }> = (props) => (
+  <svg {...props} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+  </svg>
 );
 
 // --- START OF MINES GAME ICONS ---

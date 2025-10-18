@@ -1,15 +1,16 @@
 import React from 'react';
 import { PROFILE_LINKS } from '../constants';
-import { ProfileLink } from '../types';
+import { Profile, ProfileLink } from '../types';
+import { calculateLevelInfo } from '../lib/leveling';
 
 interface ProfileDropdownProps {
-    profile: { username: string, avatar_url: string } | null;
+    profile: Profile | null;
     onNavigate: (page: ProfileLink['name']) => void;
     onLogout: () => void;
 }
 
 export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onNavigate, onLogout }) => {
-    const xpPercentage = 21.56; // Mock data
+    const levelInfo = profile ? calculateLevelInfo(profile.wagered || 0) : { level: 0, progress: 0 };
 
     return (
         <div className="relative group">
@@ -27,11 +28,11 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onNav
 
                 <div className="mb-4">
                     <div className="flex justify-between items-center text-xs text-text-muted mb-1">
-                        <span>{xpPercentage}%</span>
-                        <span>Level 13</span>
+                        <span>{levelInfo.progress.toFixed(2)}%</span>
+                        <span>Level {levelInfo.level}</span>
                     </div>
                     <div className="w-full bg-background rounded-full h-1.5">
-                        <div className="bg-accent-green h-1.5 rounded-full" style={{ width: `${xpPercentage}%` }}></div>
+                        <div className="bg-accent-green h-1.5 rounded-full" style={{ width: `${levelInfo.progress}%` }}></div>
                     </div>
                 </div>
 

@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabaseClient';
 import { PROFILE_LINKS } from '../constants';
 import { Profile, ProfileLink } from '../types';
 import { UploadIcon } from './icons';
+import { calculateLevelInfo } from '../lib/leveling';
 
 interface ProfileSidebarProps {
     profile: Profile | null;
@@ -12,7 +13,7 @@ interface ProfileSidebarProps {
 }
 
 export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile, onProfileUpdate, activePage, setActivePage }) => {
-    const xpPercentage = 21.56; // Mock data
+    const levelInfo = profile ? calculateLevelInfo(profile.wagered || 0) : { level: 0, progress: 0 };
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -102,11 +103,11 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile, onProfi
                 
                 <div className="my-6">
                     <div className="flex justify-between items-center text-xs text-text-muted mb-1">
-                        <span>{xpPercentage}%</span>
-                        <span>Level 13</span>
+                        <span>{levelInfo.progress.toFixed(2)}%</span>
+                        <span>Level {levelInfo.level}</span>
                     </div>
                     <div className="w-full bg-background rounded-full h-1.5">
-                        <div className="bg-accent-green h-1.5 rounded-full" style={{ width: `${xpPercentage}%` }}></div>
+                        <div className="bg-accent-green h-1.5 rounded-full" style={{ width: `${levelInfo.progress}%` }}></div>
                     </div>
                 </div>
 

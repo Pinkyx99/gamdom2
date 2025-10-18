@@ -1,6 +1,6 @@
 import React from 'react';
 import { SidebarNavItem, ProfileLink, RoyaltyRank, Game } from './types';
-import { HomeIcon, PromotionsIcon, LeaderboardIcon, ChallengesIcon, InstantPayoutIcon, SocialCasinoIcon, SportsIcon, CustomerHelpIcon, FaqIcon, UserCircleIcon, ChartBarIcon, ArrowsRightLeftIcon, BellIcon, CogIcon, UsersIcon, ShieldCheckIcon, ArrowRightOnRectangleIcon, DiceIcon, CrashIcon, RouletteIcon, PlinkoIcon, MinesIcon } from './components/icons';
+import { HomeIcon, PromotionsIcon, LeaderboardIcon, ChallengesIcon, InstantPayoutIcon, SocialCasinoIcon, SportsIcon, CustomerHelpIcon, FaqIcon, UserCircleIcon, ChartBarIcon, ArrowsRightLeftIcon, BellIcon, CogIcon, UsersIcon, ShieldCheckIcon, ArrowRightOnRectangleIcon, DiceIcon, CrashIcon, RouletteIcon, PlinkoIcon, MinesIcon, BlackjackIcon, SlotMachineIcon } from './components/icons';
 import { UsdIcon, GoogleIcon } from './components/icons';
 
 
@@ -10,6 +10,8 @@ export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
   { name: 'Mines', href: '#', icon: MinesIcon },
   { name: 'Roulette', href: '#', icon: RouletteIcon },
   { name: 'Dice', href: '#', icon: DiceIcon },
+  { name: 'Blackjack', href: '#', icon: BlackjackIcon },
+  { name: 'Slots', href: '#', icon: SlotMachineIcon },
   { name: 'Promotions', href: '#', icon: PromotionsIcon },
   { name: 'Leaderboard', href: '#', icon: LeaderboardIcon },
   { name: 'Challenges', href: '#', icon: ChallengesIcon },
@@ -105,7 +107,7 @@ export const ORIGINAL_GAMES: ({ name: string; image: string; rtp: number; blobCo
   { name: 'Roulette', image: 'https://i.imgur.com/0rDInCq.png', rtp: 97.3, blobColor: '#8b5cf6' },
   { name: 'Dice', image: 'https://i.imgur.com/P6P4NCa.png', rtp: 99, blobColor: '#3b82f6' },
   { name: 'Slots', image: 'https://i.imgur.com/UQVF1x6.png', rtp: 96, blobColor: '#f59e0b', comingSoon: true },
-  { name: 'Keno', image: 'https://i.imgur.com/ESlUshO.png', rtp: 98, blobColor: '#a78bfa', comingSoon: true },
+  { name: 'Blackjack', image: 'https://i.imgur.com/ESlUshO.png', rtp: 99.5, blobColor: '#a78bfa' },
 ];
 
 export const GAMES: Game[] = [

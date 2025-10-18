@@ -1,8 +1,6 @@
 
-
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Profile } from '../types';
-// FIX: Import `Session` type from '@supabase/supabase-js' instead of '../types' to resolve module export error.
 import { Session } from '@supabase/supabase-js';
 import { KenoControls } from '../components/keno/KenoControls';
 import { KenoGrid } from '../components/keno/KenoGrid';
@@ -80,8 +78,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
     }, [gameState, selectedNumbers.size]);
 
     const handlePlay = useCallback(async () => {
-        // FIX: Cast `profile.balance` to `any` before converting to a number to prevent type errors with `unknown`.
-        if (gameState !== 'idle' || selectedNumbers.size === 0 || !session || !profile || Number(profile.balance as any) < betAmount) {
+        if (gameState !== 'idle' || selectedNumbers.size === 0 || !session || !profile || profile.balance < betAmount) {
             return;
         }
 
@@ -94,11 +91,8 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
             const { error: debitError } = await supabase
                 .from('profiles')
                 .update({
-                    // FIX: Safely convert profile properties to numbers before arithmetic operations.
-                    // Cast to 'any' to handle potential 'unknown' type from Supabase.
-                    // FIX: Cast `profile.balance` to `any` to resolve the error "Argument of type 'unknown' is not assignable to parameter of type 'number'".
-                    balance: (Number(profile.balance as any) || 0) - betAmount,
-                    wagered: (Number(profile.wagered as any) || 0) + betAmount,
+                    balance: profile.balance - betAmount,
+                    wagered: profile.wagered + betAmount,
                 })
                 .eq('id', session.user.id);
             if (debitError) throw debitError;
@@ -125,12 +119,10 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                 // Fetch latest balance before adding payout to avoid race conditions
                 const { data: currentProfile, error: fetchError } = await supabase.from('profiles').select('balance').eq('id', session.user.id).single();
                 if (fetchError) throw fetchError;
-                if (!currentProfile) {
-                    throw new Error("Could not find user profile to update balance.");
-                }
-
-                // FIX: The type of `currentProfile.balance` from Supabase is 'unknown', which is not assignable to the `Number` constructor. Casting to 'any' resolves this type error.
-                const newBalance = (Number(currentProfile.balance as any) || 0) + payout;
+                if (!currentProfile) throw new Error("Could not find user profile to update balance.");
+                // FIX: Explicitly cast balance from Supabase query to a number before arithmetic operation to resolve 'unknown' type error.
+                const currentBalance = Number(currentProfile.balance) || 0;
+                const newBalance = currentBalance + payout;
                 
                 const { error: payoutError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', session.user.id);
                 if (payoutError) throw payoutError;
@@ -188,6 +180,7 @@ const KenoGamePage: React.FC<KenoGamePageProps> = ({ profile, session, onProfile
                     riskLevel={riskLevel}
                     setRiskLevel={setRiskLevel}
                     gameState={gameState}
+                    // FIX: Pass the correct handler functions to the KenoControls component.
                     onPlay={handlePlay}
                     onClear={handleClear}
                     onRandom={handleRandom}

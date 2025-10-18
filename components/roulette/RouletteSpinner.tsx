@@ -61,22 +61,9 @@ const GameStatusDisplay: React.FC<{ gameState: RouletteGameState | null; countdo
 };
 
 const TopArrowMarker: React.FC = () => (
-    <div className="absolute top-[-1px] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center pointer-events-none">
-        <svg width="28" height="16" viewBox="0 0 28 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="markerGradient" x1="0.5" y1="0" x2="0.5" y2="1">
-                    <stop offset="0%" stopColor="#FFFFFF" />
-                    <stop offset="100%" stopColor="#CCCCCC" />
-                </linearGradient>
-                <filter id="markerGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                    <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                </filter>
-            </defs>
-            <path d="M14 16L0.343145 2.34315L2.34314 0.343146C3.12419 -0.437903 4.39052 -0.437903 5.17157 0.343146L14 9.17157L22.8284 0.343146C23.6095 -0.437903 24.8758 -0.437903 25.6569 0.343146L27.6569 2.34315L14 16Z" fill="url(#markerGradient)" filter="url(#markerGlow)"/>
+    <div className="absolute top-[-8px] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center pointer-events-none">
+        <svg width="24" height="14" viewBox="0 0 24 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="text-white drop-shadow-lg">
+            <path d="M0 0 L24 0 L12 14 Z" />
         </svg>
     </div>
 );
@@ -137,7 +124,7 @@ export const RouletteSpinner: React.FC<RouletteSpinnerProps> = ({ gameState, win
 
             snapTimerRef.current = window.setTimeout(() => {
                  setIsAnimating(false);
-            }, 7500);
+            }, 5000);
 
         } else if (!hasSpunForRound.current) {
             const restingIndexNumber = (gameState === 'ended' && winningNumber !== null) ? winningNumber : previousWinningNumber;
@@ -175,7 +162,7 @@ export const RouletteSpinner: React.FC<RouletteSpinnerProps> = ({ gameState, win
                         style={{
                             transform: `translate3d(${translateX}px, 0, 0)`,
                             transition: isAnimating
-                                ? 'transform 7000ms cubic-bezier(0.25, 1, 0.5, 1)'
+                                ? 'transform 4500ms cubic-bezier(0.15, 0.85, 0.35, 1)'
                                 : 'none',
                             willChange: 'transform'
                         }}

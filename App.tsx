@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/HeroCarousel';
@@ -14,6 +13,7 @@ import CrashGamePage from './pages/CrashGamePage';
 import MinesGamePage from './pages/MinesGamePage';
 import RouletteGamePage from './pages/RouletteGamePage';
 import DiceGamePage from './pages/DiceGamePage';
+import BlackjackGamePage from './pages/BlackjackGamePage';
 import { ChatRail } from './components/ChatRail';
 import { TipUserModal } from './components/TipUserModal';
 import { UserProfileModal } from './components/UserProfileModal';
@@ -21,8 +21,9 @@ import { CogIcon } from './components/icons';
 import { Sidebar } from './components/Sidebar';
 import { PROFILE_LINKS } from './constants';
 import RouletteInfoPage from './pages/RouletteInfoPage';
+import SlotsPage from './pages/SlotsPage';
 
-type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | 'roulette-info' | ProfileLink['name'];
+type View = 'home' | 'crash' | 'mines' | 'roulette' | 'dice' | 'blackjack' | 'roulette-info' | 'slots' | ProfileLink['name'];
 
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -55,7 +56,7 @@ const App: React.FC = () => {
       const hash = window.location.hash.substring(1);
       const path = hash.startsWith('/') ? hash.substring(1).toLowerCase() : hash.toLowerCase();
       
-      const validGameViews = ['crash', 'mines', 'roulette', 'dice', 'roulette-info'];
+      const validGameViews = ['crash', 'mines', 'roulette', 'dice', 'blackjack', 'roulette-info', 'slots'];
       const validProfileViews = PROFILE_LINKS.map(l => l.name.toLowerCase().replace(' ', '-'));
       
       let view: View = 'home';
@@ -154,7 +155,7 @@ const App: React.FC = () => {
 
   const handleGameSelect = (gameName: string) => {
     const game = gameName.toLowerCase();
-    if (game === 'crash' || game === 'mines' || game === 'roulette' || game === 'dice') {
+    if (['crash', 'mines', 'roulette', 'dice', 'blackjack', 'slots'].includes(game)) {
       navigateTo(game as View);
     }
   };
@@ -166,6 +167,8 @@ const App: React.FC = () => {
         case 'roulette': return 'bg-[#0D1316]';
         case 'roulette-info': return 'bg-[#0D1316]';
         case 'dice': return 'bg-[#081018]';
+        case 'blackjack': return 'bg-[#1a1a1a]';
+        case 'slots': return 'bg-background';
         default: return 'bg-background';
     }
   }
@@ -201,6 +204,10 @@ const App: React.FC = () => {
         return <RouletteInfoPage onNavigate={navigateTo} />;
       case 'dice':
         return <DiceGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
+      case 'blackjack':
+        return <BlackjackGamePage profile={profile} session={session} onProfileUpdate={handleProfileUpdate} />;
+      case 'slots':
+        return <SlotsPage session={session} onSignInClick={() => openAuthModal('signIn')} />;
       default: // Profile pages
         return (
             <ProfilePage

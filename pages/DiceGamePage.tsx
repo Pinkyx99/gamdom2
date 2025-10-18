@@ -1,12 +1,9 @@
-
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Profile } from '../types';
 import { Session } from '@supabase/supabase-js';
 import { DiceControls } from '../components/dice/DiceControls';
 import { DiceDial } from '../components/dice/DiceDial';
 import { supabase } from '../lib/supabaseClient';
-import { DiceInfo } from '../components/dice/DiceInfo';
 
 export interface RollResult {
     id: string;
@@ -34,6 +31,28 @@ const HistoryRefreshIcon = () => (
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h5M20 20v-5h-5M4 4l1.5 1.5A9 9 0 0119.5 19.5" />
     </svg>
 );
+
+const getAdjustedWinChance = (fairChance: number): number => {
+    // This function applies a variable house edge based on the player's chosen win chance.
+    // It's tuned to roughly match the user's examples: 10% -> 7%, 50% -> 48%, 90% -> 82%, 98% -> 97%
+    let edge;
+    if (fairChance <= 10) {
+        // 30% edge, from 0% chance up to 10% chance
+        edge = 0.30;
+    } else if (fairChance <= 50) {
+        // Edge decreases linearly from 30% at 10% chance to 4% at 50% chance
+        edge = 0.30 - (0.26 * ((fairChance - 10) / 40));
+    } else if (fairChance <= 90) {
+        // Edge increases linearly from 4% at 50% chance to ~9% at 90% chance
+        edge = 0.04 + (0.05 * ((fairChance - 50) / 40));
+    } else { // fairChance > 90
+        // Edge decreases linearly from ~9% at 90% chance to 1% at 98% chance
+        // and stays at 1% for chances > 98%
+        const highChance = Math.min(fairChance, 98);
+        edge = 0.09 - (0.08 * ((highChance - 90) / 8));
+    }
+    return fairChance * (1 - edge);
+};
 
 
 const DiceGamePage: React.FC<{
@@ -137,7 +156,8 @@ const DiceGamePage: React.FC<{
             await new Promise(resolve => setTimeout(resolve, 100));
 
             const resultValue = parseFloat((Math.random() * 100).toFixed(2));
-            const win = isRollOver ? resultValue > rollValue : resultValue < rollValue;
+            const actualWinChance = getAdjustedWinChance(winChance);
+            const win = isRollOver ? resultValue > (100 - actualWinChance) : resultValue < actualWinChance;
             const payout = win ? betAmount * multiplier : 0;
 
             if (win) {
@@ -146,7 +166,9 @@ const DiceGamePage: React.FC<{
                 if (fetchError) throw new Error(fetchError.message);
                 if (!currentProfile) throw new Error("Could not find user profile to update balance.");
 
-                const newBalance = (Number(currentProfile.balance) || 0) + payout;
+                // FIX: Explicitly cast balance from Supabase query to a number before arithmetic operation to resolve 'unknown' type error.
+                const currentBalance = Number(currentProfile.balance) || 0;
+                const newBalance = currentBalance + payout;
                 const { error: payoutError } = await supabase
                     .from('profiles')
                     .update({ balance: newBalance })
@@ -177,7 +199,7 @@ const DiceGamePage: React.FC<{
             setGameState('idle');
             onProfileUpdate();
         }
-    }, [gameState, isRollOver, rollValue, betAmount, multiplier, session, profile, onProfileUpdate]);
+    }, [gameState, isRollOver, rollValue, betAmount, multiplier, session, profile, onProfileUpdate, winChance]);
 
 
     useEffect(() => {
@@ -195,7 +217,7 @@ const DiceGamePage: React.FC<{
     return (
         <div className="flex flex-col flex-1 bg-[#081018] font-sans">
             <div className="bg-[#0D1316] border-b border-outline flex-shrink-0">
-                <div className="w-full max-w-7xl mx-auto px-4 lg:px-6 flex items-center space-x-2 p-2 overflow-x-auto no-scrollbar">
+                <div className="w-full max-w-[1600px] mx-auto px-4 lg:px-6 flex items-center space-x-2 p-2 overflow-x-auto no-scrollbar">
                     {history.map((item, index) => (
                         <HistoryItem key={item.id || index} result={item} />
                     ))}
@@ -204,7 +226,7 @@ const DiceGamePage: React.FC<{
                     </button>
                 </div>
             </div>
-            <div className="w-full max-w-7xl mx-auto px-4 lg:px-6 py-4 lg:py-6 flex-1 flex flex-col justify-center">
+            <div className="w-full max-w-[1600px] mx-auto px-4 lg:px-6 py-4 lg:py-6 flex-1 flex flex-col justify-center">
                 <div className="grid grid-cols-1 lg:grid-cols-[400px,1fr] gap-6">
                     <DiceControls
                         betAmount={betAmount}
@@ -222,7 +244,7 @@ const DiceGamePage: React.FC<{
                         error={error}
                         profile={profile}
                     />
-                    <div className="bg-card-bg rounded-lg border border-outline shadow-soft flex flex-col min-h-[500px] lg:min-h-0">
+                    <div className="bg-card rounded-lg border border-outline shadow-soft flex flex-col min-h-[500px] lg:min-h-0">
                         <DiceDial
                             rollValue={rollValue}
                             isRollOver={isRollOver}
@@ -234,7 +256,6 @@ const DiceGamePage: React.FC<{
                     </div>
                 </div>
             </div>
-            <DiceInfo />
         </div>
     );
 };

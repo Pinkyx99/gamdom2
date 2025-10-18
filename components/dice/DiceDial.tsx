@@ -10,52 +10,65 @@ interface DiceSliderProps {
     previousRollValue: number;
 }
 
-// A component for the animated result marker using the user-provided image
-const ResultMarker: React.FC<{ result: RollResult, previousValue: number }> = ({ result, previousValue }) => {
-    const [position, setPosition] = useState(previousValue); // Start at previous position
+const ResultIndicator: React.FC<{ result: RollResult, previousValue: number }> = ({ result, previousValue }) => {
+    const [position, setPosition] = useState(previousValue);
 
     useEffect(() => {
-        // Animate to final position
         const timer = setTimeout(() => {
             setPosition(result.value);
-        }, 50); // Small delay to ensure CSS transition is applied
+        }, 50);
         return () => clearTimeout(timer);
     }, [result.value]);
 
-    const leftPosition = `clamp(32px, ${position}%, calc(100% - 32px))`;
+    const leftPosition = `clamp(16px, ${position}%, calc(100% - 16px))`;
 
     return (
-        <div 
-            className="absolute pointer-events-none" 
-            style={{ 
-                left: leftPosition, 
-                // h-12 container (48px) -> slider center at 24px.
-                // h-[74px] image -> top = 24px - 74px = -50px.
-                top: '-50px', 
+        <div
+            className="absolute top-1/2 pointer-events-none"
+            style={{
+                left: leftPosition,
                 zIndex: 15,
-                transition: 'left 1.2s cubic-bezier(0.25, 1, 0.5, 1)'
+                transition: 'left 1.2s cubic-bezier(0.25, 1, 0.5, 1)',
+                willChange: 'left',
             }}
         >
-            <div className="relative -translate-x-1/2">
-                 <img 
-                    src="https://i.imgur.com/SjtBAlV.png" 
-                    alt="Result Marker" 
-                    className="w-16 h-[74px]"
-                    style={{
-                        filter: result.win 
-                            ? 'drop-shadow(0 4px 12px rgba(0, 193, 123, 0.7))' 
-                            : 'drop-shadow(0 4px 12px rgba(244, 67, 54, 0.7))'
-                    }}
-                 />
+            <div className="relative -translate-x-1/2 -translate-y-1/2">
+                <div className={`w-0.5 h-14 ${result.win ? 'bg-accent-green' : 'bg-red-500'}`} />
+                <div
+                    className={`absolute -top-5 left-1/2 -translate-x-1/2 rounded-md px-2 py-0.5 text-sm font-bold text-white shadow-lg ${result.win ? 'bg-accent-green' : 'bg-red-500'}`}
+                >
+                    {result.value.toFixed(2)}
+                </div>
             </div>
         </div>
     );
 };
 
-
-// Main component, a linear slider display
 export const DiceDial: React.FC<DiceSliderProps> = ({ rollValue, isRollOver, gameState, lastRoll, onRollValueChange, previousRollValue }) => {
     const sliderRef = useRef<HTMLDivElement>(null);
+    const numberDisplayRef = useRef<HTMLDivElement>(null);
+    const animationFrameRef = useRef<number>();
+
+    // Number animation during rolling
+    useEffect(() => {
+        const animate = () => {
+            if (numberDisplayRef.current) {
+                numberDisplayRef.current.textContent = (Math.random() * 100).toFixed(2);
+            }
+            animationFrameRef.current = requestAnimationFrame(animate);
+        };
+
+        if (gameState === 'rolling') {
+            animationFrameRef.current = requestAnimationFrame(animate);
+        }
+
+        return () => {
+            if (animationFrameRef.current) {
+                cancelAnimationFrame(animationFrameRef.current);
+            }
+        };
+    }, [gameState]);
+
 
     // Dragging logic
     const handlePointerMove = useCallback((event: PointerEvent) => {
@@ -67,6 +80,7 @@ export const DiceDial: React.FC<DiceSliderProps> = ({ rollValue, isRollOver, gam
     }, [onRollValueChange]);
 
     const handlePointerUp = useCallback(() => {
+        document.body.style.cursor = 'default';
         window.removeEventListener('pointermove', handlePointerMove);
         window.removeEventListener('pointerup', handlePointerUp);
     }, [handlePointerMove]);
@@ -80,6 +94,7 @@ export const DiceDial: React.FC<DiceSliderProps> = ({ rollValue, isRollOver, gam
 
     const handlePointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
         if (gameState !== 'idle' || !sliderRef.current) return;
+        document.body.style.cursor = 'grabbing';
         const rect = sliderRef.current.getBoundingClientRect();
         const position = event.clientX - rect.left;
         const percentage = Math.max(0, Math.min(100, (position / rect.width) * 100));
@@ -91,76 +106,71 @@ export const DiceDial: React.FC<DiceSliderProps> = ({ rollValue, isRollOver, gam
     const sliderPercentage = rollValue;
 
     return (
-        <div 
-            className="flex-1 flex flex-col items-center justify-center p-4 relative min-h-[350px] overflow-hidden"
-            onPointerDown={handlePointerDown}
-        >
-            {/* Congratulations Toast */}
-            <div className={`absolute top-4 left-4 bg-background px-4 py-2 rounded-md shadow-lg text-white font-semibold text-sm z-20 transition-all duration-500 ${gameState === 'finished' && lastRoll?.win ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-                CONGRATULATIONS! YOU WIN!
-            </div>
-            
-            <div className="w-full max-w-2xl relative z-10 px-8">
-                 {/* Result Display */}
-                <div className="h-28 flex flex-col items-center justify-center">
-                    {gameState === 'idle' && !lastRoll && <p className="text-lg font-semibold uppercase text-text-muted tracking-wider animate-fade-in">PLACE YOUR BETS</p>}
-                    {gameState === 'rolling' && (
-                        <p className="text-xl font-semibold uppercase text-text-muted tracking-wider animate-pulse">
-                            Rolling...
-                        </p>
+        <div className="flex-1 flex flex-col items-center justify-center p-4 relative min-h-[350px] overflow-hidden">
+            <div
+                className="w-full max-w-2xl relative z-10 flex flex-col items-center justify-center"
+                onPointerDown={handlePointerDown}
+            >
+                {/* Main Result Display */}
+                <div className="h-28 flex items-center justify-center">
+                    {gameState === 'idle' && (
+                        <div className={`font-mono font-bold text-7xl tabular-nums text-text-muted transition-opacity duration-300 ${lastRoll ? 'opacity-0' : 'opacity-100'}`}>
+                            0.00
+                        </div>
                     )}
-                    <div className={`text-center transition-all duration-300 transform ${lastRoll && gameState !== 'rolling' ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}`}>
-                        <p className="text-sm font-bold uppercase text-text-muted">YOUR RESULT</p>
-                        <p className={`font-mono font-bold text-7xl tabular-nums ${lastRoll?.win ? 'text-accent-green' : 'text-red-500'}`} style={{ textShadow: lastRoll?.win ? '0 0 15px rgba(0, 193, 123, 0.5)' : '0 0 15px rgba(244, 67, 54, 0.5)' }}>
-                            {lastRoll?.value.toFixed(2)}
-                        </p>
+                    {gameState === 'rolling' && (
+                        <div ref={numberDisplayRef} className="font-mono font-bold text-7xl text-white tabular-nums">
+                            0.00
+                        </div>
+                    )}
+                    <div className={`font-mono font-bold text-7xl tabular-nums transition-all duration-300 transform ${gameState === 'finished' && lastRoll ? 'scale-100 opacity-100' : 'scale-75 opacity-0'} ${lastRoll?.win ? 'text-accent-green' : 'text-red-500'}`}
+                         style={{ textShadow: lastRoll?.win ? '0 0 20px rgba(100, 255, 218, 0.4)' : '0 0 20px rgba(239, 68, 68, 0.4)' }}>
+                        {lastRoll?.value.toFixed(2)}
                     </div>
                 </div>
 
                 {/* Slider */}
-                <div className="relative w-full h-12 flex items-center mt-4">
-                    {lastRoll && gameState !== 'rolling' && <ResultMarker result={lastRoll} previousValue={previousRollValue} />}
-                    
-                    <div ref={sliderRef} className={`relative w-full h-2.5 rounded-full bg-red-500 ${gameState === 'idle' ? 'cursor-pointer' : 'cursor-default'}`} role="slider" aria-valuenow={rollValue}>
-                       <div 
-                            className="absolute top-0 h-full bg-accent-green"
-                            style={isRollOver ? 
-                                { left: `${sliderPercentage}%`, right: 0, borderRadius: '0 99px 99px 0' } : 
-                                { left: 0, width: `${sliderPercentage}%`, borderRadius: '99px 0 0 99px' }
+                <div className="relative w-full h-12 flex items-center mt-8">
+                    {lastRoll && gameState !== 'rolling' && <ResultIndicator result={lastRoll} previousValue={previousRollValue} />}
+
+                    <div
+                        ref={sliderRef}
+                        className={`relative w-full h-4 rounded-full bg-red-500/20 border-2 border-red-500/30 ${gameState === 'idle' ? 'cursor-grabbing' : 'cursor-default'}`}
+                        role="slider"
+                        aria-valuenow={rollValue}
+                    >
+                        <div
+                            className="absolute top-0 h-full bg-accent-green/20 border-2 border-accent-green/30"
+                            style={isRollOver ?
+                                { left: `${sliderPercentage}%`, right: '-2px', borderRadius: '0 99px 99px 0' } :
+                                { left: '-2px', width: `${sliderPercentage}%`, borderRadius: '99px 0 0 99px' }
                             }
                         ></div>
-                         {/* Slider endpoints */}
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 border-2 border-red-500 bg-card rounded-sm"></div>
-                        <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-4 border-2 border-accent-green bg-card rounded-sm"></div>
                     </div>
 
-                    <div className="absolute top-1/2 -translate-y-1/2 pointer-events-none" style={{ left: `${sliderPercentage}%`, zIndex: 10 }}>
-                        <div className="relative -translate-x-1/2">
-                            <div className="w-8 h-8 bg-[#2d3748] rounded-md flex items-center justify-center p-0.5 shadow-lg border-2 border-outline">
-                                <div className="flex flex-col space-y-0.5">
-                                    <div className="w-5 h-0.5 bg-text-muted rounded-full"></div>
-                                    <div className="w-5 h-0.5 bg-text-muted rounded-full"></div>
-                                    <div className="w-5 h-0.5 bg-text-muted rounded-full"></div>
-                                </div>
-                            </div>
-                             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 bg-[#081018] rounded text-white font-semibold text-xs">
+                    <div
+                        className="absolute top-1/2 pointer-events-none"
+                        style={{ left: `clamp(8px, ${sliderPercentage}%, calc(100% - 8px))`, zIndex: 10 }}
+                    >
+                        <div className="relative -translate-x-1/2 -translate-y-1/2">
+                            <div className="w-1 h-8 bg-white rounded-full shadow-lg" />
+                            <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 px-2 py-1 bg-[#081018] rounded-md text-white font-semibold text-sm shadow-md border border-outline">
                                 {rollValue.toFixed(2)}
                             </div>
                         </div>
                     </div>
                 </div>
-                 <div className="relative w-full text-xs text-text-muted mt-2 px-1">
-                 </div>
+
+                {/* Ticks */}
+                <div className="relative w-full text-xs text-text-muted mt-2 px-1 h-4">
+                    {[0, 25, 50, 75, 100].map(val => (
+                        <div key={val} className="absolute -translate-x-1/2" style={{ left: `${val}%`}}>
+                           <div className="w-0.5 h-1.5 bg-text-muted/50" />
+                           <span className="absolute top-2 left-1/2 -translate-x-1/2">{val}</span>
+                        </div>
+                    ))}
+                </div>
             </div>
-             <style>{`
-                @keyframes fade-in {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-                .animate-fade-in {
-                    animation: fade-in 0.5s ease-out forwards;
-                }
-            `}</style>
         </div>
     );
 };
