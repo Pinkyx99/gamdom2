@@ -84,7 +84,7 @@ const App: React.FC = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: 'https://miheal.vercel.app',
+        redirectTo: 'https://gamdom2.vercel.app',
         queryParams: {
           prompt: 'select_account',
         },
